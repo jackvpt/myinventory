@@ -54,7 +54,7 @@ exports.updateItem = async (req, res) => {
 
     res.status(200).json(updatedItem)
     console.log(
-      `Item updated: ${updatedItem._id} - ${updatedItem.label}`
+      `Item updated: ${updatedItem.quantity} - ${updatedItem.label}`
     )
   } catch (error) {
     res.status(401).json({ error })

@@ -1,0 +1,7 @@
+@use "../../styles/utils/variables" as *;
+@use "../../styles/utils/mixins" as *;
+
+header {
+  position: relative;
+  z-index: 1;
+}
