@@ -1,0 +1,39 @@
+@use "../../styles/utils/variables" as *;
+@use "../../styles/utils/mixins" as *;
+
+.container__item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap:0.5rem;
+  height: 2rem;
+  width: 100%;
+  max-width: 800px;
+
+  &-quantity,
+  &-label,
+  &-mainlocation,
+  &-sublocation {
+    padding: 0.5rem;
+    background-color: $primary-color-3;
+    color: $text-color-2;
+    text-align: center;
+  }
+
+  &-quantity {
+    width: 10%;
+  }
+
+  &-label {
+    width: 40%;
+  }
+
+  &-mainlocation {
+    width: 25%;
+  }
+
+  &-sublocation {
+    width: 25%;
+  }
+}

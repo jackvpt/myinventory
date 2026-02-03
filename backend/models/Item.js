@@ -4,20 +4,29 @@ const mongoose = require("mongoose")
 /** Create a mongoose Schema */
 const itemSchema = new mongoose.Schema(
   {
+    category: {
+      type: String,
+      required: true,
+      trim: true, // remove whitespace
+    },
     label: {
       type: String,
       required: true,
-      trim: true, // enlève les espaces inutiles
+      trim: true, // remove whitespace
     },
     quantity: {
       type: Number,
       required: true,
-      min: 0, // la quantité ne peut pas être négative
+      min: 0, // quantity cannot be negative
     },
-    location: {
+    mainlocation: {
       type: String,
       required: true,
-      trim: true,
+      trim: true, // remove whitespace
+    },
+    sublocation: {
+      type: String,
+      trim: true, // remove whitespace
     },
   },
   {

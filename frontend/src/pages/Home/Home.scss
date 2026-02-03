@@ -1,61 +1,20 @@
 @use "../../styles/utils/variables" as *;
 @use "../../styles/utils/mixins" as *;
 
-.home__body {
-  max-width: 1024px;
+.container__home {
+  h1 {
+    margin-bottom: 3rem;
+  }
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  &-image-content {
+  &-items {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    @include responsive-tablet {
-      flex-direction: row;
-      gap: 2rem;
-    }
-  }
-
-  .image-below {
-    flex-direction: column-reverse;
-
-    @include responsive-tablet {
-      flex-direction: row;
-    }
-  }
-
-  &-content {
-    font-family: $font_elegant;
-    font-size: 1.5rem;
-    text-align: center;
-
-    @include responsive-tablet {
-      text-align: left;
-    }
-  }
-
-  &-image {
-    width: auto;
-    width: 9rem;
-    min-height:3rem;
-    display: block;
-    object-fit: contain;
-  }
-
-  &-portrait {
-    margin-top: 2rem;
-    width: 12rem;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    gap: 0.5rem;
+    width:100%;
   }
 }

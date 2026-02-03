@@ -1,4 +1,9 @@
+// CSS
+import "./Home.scss"
+
+import Item from "../../components/Item/Item"
 import { useItems, useCreateItem } from "../../hooks/useItems"
+import Edit from "../../components/Edit/Edit"
 
 export default function Inventory() {
   const { data, isLoading, isError, error } = useItems()
@@ -7,28 +12,25 @@ export default function Inventory() {
   if (isLoading) return <p>Chargement…</p>
   if (isError) return <p>{error.message}</p>
 
-  const handleAdd = () => {
-    mutate({
-      name: "Clavier",
-      quantity: 5,
-    })
-  }
+  // const handleAdd = () => {
+  //   mutate({
+  //     label: "Combinaison légère",
+  //     quantity: 5,
+  //     location: "Caisson",
+  //   })
+  // }
 
   return (
-    <>
+    <section className="container__home">
       <h1>Inventaire</h1>
-
-      <ul>
+      {/* <Edit open={true} /> */}
+      <div className="container__home-items">
         {data.map((item) => (
-          <li key={item.id}>
-            {item.label} — {item.quantity} - {item.location}
-          </li>
+          <Item key={item.id} {...item} />
         ))}
-      </ul>
+      </div>
 
-      <button onClick={handleAdd} disabled={isPending}>
-        Ajouter un item
-      </button>
-    </>
+
+    </section>
   )
 }

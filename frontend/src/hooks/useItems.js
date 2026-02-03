@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { fetchItems, createItem } from "../services/api"
+import { fetchItems, createItem } from "../api/items.api"
 
 export const useItems = () => {
   return useQuery({
@@ -14,7 +14,7 @@ export const useCreateItem = () => {
   return useMutation({
     mutationFn: createItem,
     onSuccess: () => {
-      // Rafraîchit automatiquement l'inventaire
+      // Refresh automatically the inventory
       queryClient.invalidateQueries({ queryKey: ["items"] })
     },
   })
