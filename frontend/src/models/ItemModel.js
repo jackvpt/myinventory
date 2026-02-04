@@ -1,23 +1,21 @@
 export default class ItemModel {
   constructor(data = {}) {
-    this.id = data._id || data.id || null;
+    this.id = data._id || data.id || null
 
-    this.category = data.category ?? "";
-    this.label = data.label ?? "";
-    this.quantity = Number(data.quantity ?? 0);
+    this.category = data.category ?? ""
+    this.type = data.type ?? ""
+    this.label = data.label ?? ""
+    this.quantity = Number(data.quantity ?? 0)
 
-    this.mainlocation = data.mainlocation ?? "";
-    this.sublocation = data.sublocation ?? "";
+    this.mainlocation = data.mainlocation ?? ""
+    this.sublocation = data.sublocation ?? ""
 
-    this.location = this.mainlocation + (this.sublocation ? ` - ${this.sublocation}` : "");
+    this.location =
+      this.mainlocation + (this.sublocation ? ` - ${this.sublocation}` : "")
 
-    this.createdAt = data.createdAt
-      ? new Date(data.createdAt)
-      : null;
+    this.createdAt = data.createdAt ? new Date(data.createdAt) : null
 
-    this.updatedAt = data.updatedAt
-      ? new Date(data.updatedAt)
-      : null;
+    this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : null
   }
 
   // 🔍 Simple validation
@@ -27,7 +25,7 @@ export default class ItemModel {
       this.label.trim() !== "" &&
       this.mainlocation.trim() !== "" &&
       this.quantity >= 0
-    );
+    )
   }
 
   // 📦 Format ready to send to the API
@@ -38,6 +36,6 @@ export default class ItemModel {
       quantity: this.quantity,
       mainlocation: this.mainlocation.trim(),
       sublocation: this.sublocation?.trim() || undefined,
-    };
+    }
   }
 }

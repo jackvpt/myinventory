@@ -9,6 +9,11 @@ const itemSchema = new mongoose.Schema(
       required: true,
       trim: true, // remove whitespace
     },
+    type: {
+      type: String,
+      required: true,
+      trim: true, // remove whitespace
+    },
     label: {
       type: String,
       required: true,

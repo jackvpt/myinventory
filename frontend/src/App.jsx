@@ -27,10 +27,6 @@ function App() {
     )
   }
 
-  console.log("Items loaded:", items.data)
-  console.log("Categories loaded:", categories.data)
-  console.log("Locations loaded:", locations.data)
-
   // Once data is ready, render the router
   return (
     <BrowserRouter>
