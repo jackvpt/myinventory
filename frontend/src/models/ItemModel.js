@@ -22,6 +22,7 @@ export default class ItemModel {
   isValid() {
     return (
       this.category.trim() !== "" &&
+      this.type.trim() !== "" &&
       this.label.trim() !== "" &&
       this.mainlocation.trim() !== "" &&
       this.quantity >= 0
@@ -32,6 +33,7 @@ export default class ItemModel {
   toPayload() {
     return {
       category: this.category.trim(),
+      type: this.type.trim(),
       label: this.label.trim(),
       quantity: this.quantity,
       mainlocation: this.mainlocation.trim(),

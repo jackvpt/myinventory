@@ -15,10 +15,12 @@ import { useLocations } from "../../hooks/useLocations"
 import ItemModel from "../../models/ItemModel"
 import { useCreateItem, useItems } from "../../hooks/useItems"
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
+import { useTypes } from "../../hooks/useTypes"
 
 const Edit = (item) => {
   const { data: items = [] } = useItems()
   const { data: categories = [] } = useCategories()
+  const { data: types = [] } = useTypes()
   const { data: locations = [] } = useLocations()
 
   const topLocations = Object.entries(
@@ -37,6 +39,7 @@ const Edit = (item) => {
   // Form state
   const formInitialState = {
     category: "",
+    type: "",
     label: "",
     quantity: 1,
     mainlocation: "",
@@ -68,7 +71,10 @@ const Edit = (item) => {
 
   const handleAdd = () => {
     const model = new ItemModel(form)
-    if (!model.isValid()) return
+    if (!model.isValid()) {
+      console.log("Data not valid")
+      return
+    }
     mutate(model.toPayload())
   }
 
@@ -83,30 +89,15 @@ const Edit = (item) => {
       height: 28,
       fontSize: "0.75rem",
       px: 0.5,
-      color: "white",
     },
 
     "& .MuiInputLabel-root": {
       fontSize: "0.7rem",
       top: "-4px",
-      color: "white",
     },
 
     "& .MuiInputBase-input": {
-      color: "white",
       padding: "4px 6px",
-    },
-
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "white",
-    },
-
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "lightblue",
-    },
-
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "white",
     },
   }
 
@@ -121,6 +112,7 @@ const Edit = (item) => {
     height: 24,
     padding: "2px 4px",
     fontSize: "0.7rem",
+    borderRadius: 1,
   }
 
   return (
@@ -131,6 +123,17 @@ const Edit = (item) => {
         value={form.category}
         onChange={handleChange("category")}
         items={categories}
+        getValue={(cat) => cat.name}
+        getLabel={(cat) => cat.name}
+        sx={customStyle}
+      />
+
+      {/* Type */}
+      <CustomTextField
+        label="Type"
+        value={form.type}
+        onChange={handleChange("type")}
+        items={types}
         getValue={(cat) => cat.name}
         getLabel={(cat) => cat.name}
         sx={customStyle}
@@ -154,6 +157,30 @@ const Edit = (item) => {
           inputProps={{ min: 1 }}
           sx={customStyle}
         />
+        <div className="container__edit-quantity-spinner">
+          <div
+            className="container__edit-quantity-spinner-button"
+            onClick={() =>
+              setForm((prev) => ({
+                ...prev,
+                quantity: prev.quantity + 1,
+              }))
+            }
+          >
+            +
+          </div>
+          <div
+            className="container__edit-quantity-spinner-button"
+            onClick={() =>
+              setForm((prev) => ({
+                ...prev,
+                quantity: prev.quantity >= 1 ? prev.quantity - 1 : 0,
+              }))
+            }
+          >
+            -
+          </div>
+        </div>
         <Button
           variant="contained"
           size="small"

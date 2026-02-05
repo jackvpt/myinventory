@@ -24,7 +24,7 @@
   &-mainlocation,
   &-sublocation {
     padding: 0.25rem;
-    min-height:1.5rem;
+    min-height:1.8rem;
     background-color: $primary-color-3;
     color: $text-color-2;
     text-align: center;
@@ -34,19 +34,26 @@
     white-space: nowrap;
   }
 
+  &-category {
+    width: 13%;
+  }
+  &-type {
+    width: 13%;
+  }
+
   &-quantity {
-    width: 10%;
+    width: 5%;
   }
 
   &-label {
-    width: 40%;
+    width: 27%;
   }
 
   &-mainlocation {
-    width: 25%;
+    width: 20%;
   }
 
   &-sublocation {
-    width: 25%;
+    width: 20%;
   }
 }

@@ -4,6 +4,7 @@ import "./Item.scss"
 const Item = ({ item }) => {
   return (
     <div className="container__item">
+      <div className="container__item-category">{item.category}</div>
       <div className="container__item-type">{item.type}</div>
       <div className="container__item-label">{item.label}</div>
       <div className="container__item-mainlocation">{item.mainlocation}</div>
