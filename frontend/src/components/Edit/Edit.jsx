@@ -5,19 +5,23 @@ import "./Edit.scss"
 import { DialogActions, Button } from "@mui/material"
 
 // React
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 
 // Hooks
 import { useCategories } from "../../hooks/useCategories"
 import { useLocations } from "../../hooks/useLocations"
+import { useCreateItem, useDeleteItem, useItems } from "../../hooks/useItems"
+import { useTypes } from "../../hooks/useTypes"
 
 // Model
 import ItemModel from "../../models/ItemModel"
-import { useCreateItem, useItems } from "../../hooks/useItems"
-import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
-import { useTypes } from "../../hooks/useTypes"
 
-const Edit = (item) => {
+import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
+import { updateItem } from "../../api/items.api"
+
+const Edit = () => {
+  const selectedItem = useSelector((state) => state.selectedItem)
   const { data: items = [] } = useItems()
   const { data: categories = [] } = useCategories()
   const { data: types = [] } = useTypes()
@@ -34,7 +38,8 @@ const Edit = (item) => {
     .slice(0, 3)
     .map(([loc]) => loc)
 
-  const { mutate, isPending } = useCreateItem()
+  const { mutate: createItem, isPending } = useCreateItem()
+  const { mutate: deleteItem, isLoading } = useDeleteItem()
 
   // Form state
   const formInitialState = {
@@ -44,8 +49,17 @@ const Edit = (item) => {
     quantity: 1,
     mainlocation: "",
     sublocation: "",
+    notes: "",
   }
   const [form, setForm] = useState(formInitialState)
+
+  useEffect(() => {
+    if (selectedItem) {
+      setForm(selectedItem)
+    } else {
+      setForm(formInitialState)
+    }
+  }, [selectedItem])
 
   const handleChange = (field) => (event) => {
     let value = event.target.value
@@ -75,14 +89,24 @@ const Edit = (item) => {
       console.log("Data not valid")
       return
     }
-    mutate(model.toPayload())
+    createItem(model.toPayload())
   }
 
   const handleModify = () => {
-    if (!form.isValid()) return
+    const model = new ItemModel(form)
+    if (!model.isValid()) {
+      console.log("Data not valid")
+      return
+    }
+    updateItem({
+      id: model.id,
+      item: model.toPayload(),
+    })
   }
 
-  const handleDelete = () => {}
+  const handleDelete = () => {
+    deleteItem(selectedItem.id)
+  }
 
   const customStyle = {
     "& .MuiInputBase-root": {
@@ -254,7 +278,27 @@ const Edit = (item) => {
         sx={customStyle}
       />
 
+      {/* Notes */}
+      <CustomTextField
+        label="Notes"
+        value={form.notes}
+        onChange={handleChange("notes")}
+        multiline
+        rows={3}
+        sx={{
+          ...customStyle,
+
+          "& .MuiInputBase-root": {
+            ...customStyle["& .MuiInputBase-root"],
+            height: "auto",
+            alignItems: "flex-start",
+            paddingTop: "6px",
+          },
+        }}
+      />
+
       <DialogActions>
+        {/* RESET button */}
         <Button
           variant="contained"
           size="small"
@@ -268,6 +312,8 @@ const Edit = (item) => {
         >
           Reset
         </Button>
+
+        {/* CREATE button */}
         <Button
           variant="contained"
           size="small"
@@ -277,14 +323,19 @@ const Edit = (item) => {
         >
           Ajouter
         </Button>
+
+        {/* UPDATE button */}
         <Button
           variant="contained"
           size="small"
           onClick={handleModify}
           color="warning"
+          disabled={!isFormValid}
         >
           Modifier
         </Button>
+
+        {/* DELETE button */}
         <Button
           variant="contained"
           size="small"

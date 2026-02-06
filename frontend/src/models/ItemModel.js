@@ -13,6 +13,7 @@ export default class ItemModel {
     this.location =
       this.mainlocation + (this.sublocation ? ` - ${this.sublocation}` : "")
 
+    this.notes = data.notes ?? ""
     this.createdAt = data.createdAt ? new Date(data.createdAt) : null
 
     this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : null
@@ -38,6 +39,7 @@ export default class ItemModel {
       quantity: this.quantity,
       mainlocation: this.mainlocation.trim(),
       sublocation: this.sublocation?.trim() || undefined,
+      notes: this.notes.trim() || undefined,
     }
   }
 }

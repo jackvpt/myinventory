@@ -1,41 +1,57 @@
+import axios from "axios"
 import ItemModel from "../models/ItemModel"
 
 const API_URL = import.meta.env.VITE_API_URL
 
+// Create an Axios instance for easier configuration
+const api = axios.create({
+  baseURL: API_URL,
+  headers: { "Content-Type": "application/json" },
+})
+
+// ----------------------------
+// Fetch all items
+// ----------------------------
 export const fetchItems = async () => {
-  const response = await fetch(`${API_URL}/items`)
+  // GET request to /items
+  const { data } = await api.get("/items")
 
-  if (!response.ok) {
-    throw new Error("Error while loading inventory")
-  }
-
-  const data = await response.json()
-
-  // 🔁 API → Model
+  // Convert each API object into an ItemModel instance
   return data.map((item) => new ItemModel(item))
 }
 
+// ----------------------------
+// Create a new item
+// ----------------------------
 export const createItem = async (item) => {
+  // Ensure we are working with an ItemModel
   const model = item instanceof ItemModel ? item : new ItemModel(item)
 
-  if (!model.isValid()) {
-    throw new Error("Data invalid")
-  }
+  // Validate the item before sending to API
+  if (!model.isValid()) throw new Error("Data invalid")
 
-  const response = await fetch(`${API_URL}/items`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(model.toPayload()),
-  })
+  // POST request to /items with JSON payload
+  const { data } = await api.post("/items", model.toPayload())
 
-  if (!response.ok) {
-    throw new Error("Error while creating item")
-  }
+  // Return a new ItemModel instance from backend response
+  return new ItemModel(data)
+}
 
-  const data = await response.json()
+// ----------------------------
+// Delete an item by ID
+// ----------------------------
+export const deleteItem = async (id) => {
+  // DELETE request to /items/:id
+  await api.delete(`/items/${id}`)
 
-  // 🔁 Backend → Model
+  // Return the deleted item ID for tracking
+  return id
+}
+
+// ----------------------------
+// Update an existing item
+// ----------------------------
+export const updateItem = async ({ id, item }) => {
+  const { data } = await api.put(`/items/${id}`, item)
   return new ItemModel(data)
 }

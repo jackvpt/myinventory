@@ -1,18 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-export const initialState = {
-  id: null,
-}
+export const initialState = null
 
 const selectedItemSlice = createSlice({
   name: "selectedItem",
   initialState,
   reducers: {
     setSelectedItem: (state, action) => {
-      state.id = action.payload.id
+      return action.payload
     },
-    clearSelectedItem: (state) => {
-      state.id = null
+    clearSelectedItem: () => {
+      return null
     },
   },
 })

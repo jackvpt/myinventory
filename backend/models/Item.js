@@ -33,6 +33,9 @@ const itemSchema = new mongoose.Schema(
       type: String,
       trim: true, // remove whitespace
     },
+    notes: {
+      type: String,
+    },
   },
   {
     timestamps: true,

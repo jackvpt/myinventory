@@ -1,5 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { fetchItems, createItem } from "../api/items.api"
+import {
+  fetchItems,
+  createItem,
+  deleteItem,
+  updateItem,
+} from "../api/items.api"
 
 export const useItems = () => {
   const query = useQuery({
@@ -24,7 +29,7 @@ export const useItems = () => {
 
   return {
     ...query,
-    topLocations, 
+    topLocations,
   }
 }
 
@@ -36,6 +41,38 @@ export const useCreateItem = () => {
     onSuccess: () => {
       // Refresh automatically the inventory
       queryClient.invalidateQueries({ queryKey: ["items"] })
+    },
+  })
+}
+
+export const useDeleteItem = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: deleteItem, // deleteItem(id) returns the deleted id
+    onSuccess: () => {
+      // Refresh the items list after deletion
+      queryClient.invalidateQueries({ queryKey: ["items"] })
+    },
+    onError: (err) => {
+      console.error("Error deleting item:", err)
+    },
+  })
+}
+
+export const useUpdateItem = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, item }) => updateItem({ id, item }),
+
+    onSuccess: (updatedItem) => {
+      queryClient.invalidateQueries({ queryKey: ["items"] })
+      console.log("Item updated:", updatedItem)
+    },
+
+    onError: (err) => {
+      console.error("Error updating item:", err)
     },
   })
 }
