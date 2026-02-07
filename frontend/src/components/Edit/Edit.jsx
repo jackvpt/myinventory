@@ -2,7 +2,7 @@
 import "./Edit.scss"
 
 // MUI
-import { DialogActions, Button } from "@mui/material"
+import { DialogActions, Button, Stack, CircularProgress } from "@mui/material"
 
 // React
 import { useEffect, useState } from "react"
@@ -11,7 +11,7 @@ import { useSelector } from "react-redux"
 // Hooks
 import { useCategories } from "../../hooks/useCategories"
 import { useLocations } from "../../hooks/useLocations"
-import { useCreateItem, useDeleteItem, useItems } from "../../hooks/useItems"
+import { useCreateItem, useDeleteItem, useItems, useUpdateItem } from "../../hooks/useItems"
 import { useTypes } from "../../hooks/useTypes"
 
 // Model
@@ -38,8 +38,35 @@ const Edit = () => {
     .slice(0, 3)
     .map(([loc]) => loc)
 
-  const { mutate: createItem, isPending } = useCreateItem()
-  const { mutate: deleteItem, isLoading } = useDeleteItem()
+  // Mutations
+  const {
+    mutate: createItem,
+    isPending: isCreating,
+    isSuccess: isCreateSuccess,
+    isError: isCreateError,
+    error: createError,
+    reset: resetCreate,
+  } = useCreateItem()
+
+  const {
+  mutate: updateItem,
+  isPending: isUpdating,
+  isSuccess: isUpdateSuccess,
+  isError: isUpdateError,
+  error: updateError,
+  reset: resetUpdate
+} = useUpdateItem()
+
+  const {
+    mutate: deleteItem,
+    isPending: isDeleting,
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+    error: deleteError,
+    reset: resetDelete,
+  } = useDeleteItem()
+
+  const isProcessing = isCreating || isDeleting || isUpdating
 
   // Form state
   const formInitialState = {
@@ -60,6 +87,18 @@ const Edit = () => {
       setForm(formInitialState)
     }
   }, [selectedItem])
+
+  useEffect(() => {
+    if (isCreateSuccess || isDeleteSuccess) {
+      const timer = setTimeout(() => {
+        resetCreate()
+        resetUpdate()
+        resetDelete()
+      }, 2500)
+
+      return () => clearTimeout(timer)
+    }
+  }, [isCreateSuccess, isDeleteSuccess])
 
   const handleChange = (field) => (event) => {
     let value = event.target.value
@@ -345,6 +384,21 @@ const Edit = () => {
           Supprimer
         </Button>
       </DialogActions>
+
+      <div className="container__edit-apiResult">
+        {isProcessing && <p className="loading">Traitement en cours...</p>}
+
+        {isCreateSuccess && <p className="success">Création réussie</p>}
+        {isUpdateSuccess && <p className="success">Mise à jour réussie</p>}
+
+        {isDeleteSuccess && <p className="success">Suppression réussie</p>}
+
+        {(isCreateError || isUpdateError || isDeleteError) && (
+          <p className="error">
+            ❌ {createError?.message || updateError?.message || deleteError?.message}
+          </p>
+        )}
+      </div>
     </div>
   )
 }
