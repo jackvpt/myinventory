@@ -13,7 +13,7 @@ import Error from "../pages/Error/Error"
  */
 const Router = () => {
   return (
-    <>
+    <div className="app">
       {/* Header displayed on all pages */}
       <Header />
       <main role="main">
@@ -21,14 +21,13 @@ const Router = () => {
         {/* SEO compliant main landmark */}
         <Routes>
           <Route path="/" element={<Home />} />
-
           <Route path="*" element={<Error />} />
         </Routes>
       </main>
 
       {/* Footer displayed on all pages */}
       <Footer />
-    </>
+    </div>
   )
 }
 

@@ -5,13 +5,14 @@
   display: grid;
   justify-content: center;
   grid-template-columns:
-    7rem /* category */
-    7rem /* type */
-    15rem /* label */
-    7rem /* main */
-    9rem /* sub */
-    2.5rem /* quantity */
-    12rem; /* notes */
+    minmax(6rem, 1fr) /* category */
+    minmax(6rem, 1fr) /* type */
+    minmax(12rem, 2fr) /* label */
+    minmax(6rem, 1fr) /* main */
+    minmax(8rem, 1fr) /* sub */
+    minmax(3rem, 0.7fr) /* quantity */
+    minmax(10rem, 2fr); /* notes */
+
   align-items: center;
   gap: 2px;
   height: 2rem;

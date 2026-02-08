@@ -21,10 +21,7 @@ import { store } from "./store/store"
 const darkTheme = createTheme({
   palette: {
     mode: "dark", // enable dark mode
-    primary: { main: "#2b3c56", contrastText: "#ffffff" }, // primary blue
-    secondary: { main: "#020202", contrastText: "#ffffff" }, // secondary blue
-    background: { default: "#617a9c", paper: "#263447" }, // general background and cards
-    text: { primary: "#fff", secondary: "#fff" }, // light text
+   
   },
   typography: {
     fontFamily: "Inter, Arial, sans-serif",

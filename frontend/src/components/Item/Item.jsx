@@ -4,7 +4,7 @@ import "./Item.scss"
 import { useDispatch } from "react-redux"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 
-const Item = ({ item }) => {
+const Item = ({ item, header= false }) => {
   const dispatch = useDispatch()
 
   const handleSelectItem = () => {

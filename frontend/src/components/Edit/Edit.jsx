@@ -29,7 +29,6 @@ import { useTypes } from "../../hooks/useTypes"
 import ItemModel from "../../models/ItemModel"
 
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
-import { createItem, updateItem } from "../../api/items.api"
 import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 
 const Edit = () => {

@@ -4,6 +4,7 @@ import "./Home.scss"
 import Item from "../../components/Item/Item"
 import { useItems } from "../../hooks/useItems"
 import Edit from "../../components/Edit/Edit"
+import ItemsDataGrid from "../../components/ItemsDataGrid/ItemsDataGrid"
 
 export default function Inventory() {
   const { data, isLoading, isError, error } = useItems()
@@ -19,9 +20,7 @@ export default function Inventory() {
           <Edit open={true} />
         </div>
         <div className="container__home__layout-items">
-          {data.map((item) => (
-            <Item key={item.id} item={item} />
-          ))}
+         <ItemsDataGrid items={data} />
         </div>
       </div>
     </section>
