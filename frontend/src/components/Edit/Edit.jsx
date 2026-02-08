@@ -2,7 +2,13 @@
 import "./Edit.scss"
 
 // MUI
-import { DialogActions, Button, Stack, CircularProgress } from "@mui/material"
+import {
+  DialogActions,
+  Button,
+  Stack,
+  CircularProgress,
+  Box,
+} from "@mui/material"
 
 // React
 import { useEffect, useState } from "react"
@@ -11,14 +17,20 @@ import { useSelector } from "react-redux"
 // Hooks
 import { useCategories } from "../../hooks/useCategories"
 import { useLocations } from "../../hooks/useLocations"
-import { useCreateItem, useDeleteItem, useItems, useUpdateItem } from "../../hooks/useItems"
+import {
+  useCreateItem,
+  useDeleteItem,
+  useItems,
+  useUpdateItem,
+} from "../../hooks/useItems"
 import { useTypes } from "../../hooks/useTypes"
 
 // Model
 import ItemModel from "../../models/ItemModel"
 
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
-import { updateItem } from "../../api/items.api"
+import { createItem, updateItem } from "../../api/items.api"
+import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 
 const Edit = () => {
   const selectedItem = useSelector((state) => state.selectedItem)
@@ -49,13 +61,13 @@ const Edit = () => {
   } = useCreateItem()
 
   const {
-  mutate: updateItem,
-  isPending: isUpdating,
-  isSuccess: isUpdateSuccess,
-  isError: isUpdateError,
-  error: updateError,
-  reset: resetUpdate
-} = useUpdateItem()
+    mutate: updateItem,
+    isPending: isUpdating,
+    isSuccess: isUpdateSuccess,
+    isError: isUpdateError,
+    error: updateError,
+    reset: resetUpdate,
+  } = useUpdateItem()
 
   const {
     mutate: deleteItem,
@@ -66,7 +78,15 @@ const Edit = () => {
     reset: resetDelete,
   } = useDeleteItem()
 
-  const isProcessing = isCreating || isDeleting || isUpdating
+  if (isCreateSuccess) {
+    setTimeout(() => resetCreate(), 2500)
+  }
+  if (isUpdateSuccess) {
+    setTimeout(() => resetUpdate(), 2500)
+  }
+  if (isDeleteSuccess) {
+    setTimeout(() => resetDelete(), 2500)
+  }
 
   // Form state
   const formInitialState = {
@@ -87,18 +107,6 @@ const Edit = () => {
       setForm(formInitialState)
     }
   }, [selectedItem])
-
-  useEffect(() => {
-    if (isCreateSuccess || isDeleteSuccess) {
-      const timer = setTimeout(() => {
-        resetCreate()
-        resetUpdate()
-        resetDelete()
-      }, 2500)
-
-      return () => clearTimeout(timer)
-    }
-  }, [isCreateSuccess, isDeleteSuccess])
 
   const handleChange = (field) => (event) => {
     let value = event.target.value
@@ -122,16 +130,17 @@ const Edit = () => {
     (loc) => loc.name === form.mainlocation,
   )
 
-  const handleAdd = () => {
+  const handleCreate = () => {
     const model = new ItemModel(form)
     if (!model.isValid()) {
       console.log("Data not valid")
       return
     }
+
     createItem(model.toPayload())
   }
 
-  const handleModify = () => {
+  const handleUpdate = () => {
     const model = new ItemModel(form)
     if (!model.isValid()) {
       console.log("Data not valid")
@@ -343,6 +352,7 @@ const Edit = () => {
           size="small"
           onClick={() => setForm(formInitialState)}
           sx={{
+            width: "80px",
             backgroundColor: "gray",
             "&:hover": {
               backgroundColor: "darkgray",
@@ -353,51 +363,105 @@ const Edit = () => {
         </Button>
 
         {/* CREATE button */}
-        <Button
-          variant="contained"
-          size="small"
-          onClick={handleAdd}
-          color="success"
-          disabled={!isFormValid}
-        >
-          Ajouter
-        </Button>
+        <Box sx={{ position: "relative", display: "inline-flex" }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleCreate}
+            color="success"
+            disabled={!isFormValid || isCreating}
+            sx={{ width: "100px" }}
+          >
+            Ajouter
+          </Button>
+
+          {isCreating && (
+            <CircularProgress
+              size={24}
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
+        </Box>
 
         {/* UPDATE button */}
-        <Button
-          variant="contained"
-          size="small"
-          onClick={handleModify}
-          color="warning"
-          disabled={!isFormValid}
-        >
-          Modifier
-        </Button>
+        <Box sx={{ position: "relative", display: "inline-flex" }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleUpdate}
+            color="warning"
+            disabled={!isFormValid || isUpdating}
+            sx={{ width: "100px" }}
+          >
+            Modifier
+          </Button>
+
+          {isUpdating && (
+            <CircularProgress
+              size={24}
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
+        </Box>
 
         {/* DELETE button */}
-        <Button
-          variant="contained"
-          size="small"
-          onClick={handleDelete}
-          color="error"
-        >
-          Supprimer
-        </Button>
+        <Box sx={{ position: "relative", display: "inline-flex" }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleDelete}
+            color="error"
+            disabled={!isFormValid || isDeleting}
+            sx={{ width: "100px" }}
+          >
+            Supprimer
+          </Button>
+
+          {isDeleting && (
+            <CircularProgress
+              size={24}
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
+        </Box>
       </DialogActions>
-
-      <div className="container__edit-apiResult">
-        {isProcessing && <p className="loading">Traitement en cours...</p>}
-
-        {isCreateSuccess && <p className="success">Création réussie</p>}
-        {isUpdateSuccess && <p className="success">Mise à jour réussie</p>}
-
-        {isDeleteSuccess && <p className="success">Suppression réussie</p>}
-
-        {(isCreateError || isUpdateError || isDeleteError) && (
-          <p className="error">
-            ❌ {createError?.message || updateError?.message || deleteError?.message}
-          </p>
-        )}
+      <div className="container__edit-apiStatus">
+        <ApiStatus
+          isSuccess={isCreateSuccess}
+          isError={isCreateError}
+          error={createError}
+          successMessage="Elément ajouté"
+        />
+        <ApiStatus
+          isSuccess={isUpdateSuccess}
+          isError={isUpdateError}
+          error={updateError}
+          successMessage="Elément modifié"
+        />
+        <ApiStatus
+          isSuccess={isDeleteSuccess}
+          isError={isDeleteError}
+          error={deleteError}
+          successMessage="Elément supprimé"
+        />
       </div>
     </div>
   )

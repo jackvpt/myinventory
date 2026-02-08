@@ -1,0 +1,16 @@
+.container-apiStatus {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  p {
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .iconError {
+    color: orange;
+    font-size: 1.2rem;
+  }
+}

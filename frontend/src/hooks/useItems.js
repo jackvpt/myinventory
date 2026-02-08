@@ -54,12 +54,8 @@ export const useCreateItem = () => {
   return useMutation({
     mutationFn: createItem,
 
-    onSuccess: () => {
-      invalidateItems(queryClient)
-    },
-
-    onError: (error) => {
-      console.error("Create error:", error?.message || error)
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["items"] })
     },
   })
 }
