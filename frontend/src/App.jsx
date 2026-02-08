@@ -13,6 +13,10 @@ import {
   CssBaseline,
   GlobalStyles,
 } from "@mui/material"
+
+import { frFR } from "@mui/material/locale"
+import { frFR as dataGridFrFR } from '@mui/x-data-grid/locales';
+
 import { useTypes } from "./hooks/useTypes"
 import { Provider } from "react-redux"
 import { store } from "./store/store"
@@ -21,8 +25,9 @@ import { store } from "./store/store"
 const darkTheme = createTheme({
   palette: {
     mode: "dark", // enable dark mode
-   
   },
+  frFR,
+  dataGridFrFR,
   typography: {
     fontFamily: "Inter, Arial, sans-serif",
   },
