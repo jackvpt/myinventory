@@ -12,7 +12,7 @@ import {
 
 // React
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 // Hooks
 import { useCategories } from "../../hooks/useCategories"
@@ -30,8 +30,10 @@ import ItemModel from "../../models/ItemModel"
 
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
 import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
+import { setSelectedItem } from "../../features/selectedItemSlice"
 
 const Edit = () => {
+  const dispatch = useDispatch()
   const selectedItem = useSelector((state) => state.selectedItem)
   const { data: items = [] } = useItems()
   const { data: categories = [] } = useCategories()
@@ -77,14 +79,47 @@ const Edit = () => {
     reset: resetDelete,
   } = useDeleteItem()
 
-  if (isCreateSuccess) {
+  if (
+    isCreateSuccess ||
+    isCreateError ||
+    isUpdateSuccess ||
+    isUpdateError ||
+    isDeleteSuccess ||
+    isDeleteError
+  ) {
     setTimeout(() => resetCreate(), 2500)
-  }
-  if (isUpdateSuccess) {
     setTimeout(() => resetUpdate(), 2500)
-  }
-  if (isDeleteSuccess) {
     setTimeout(() => resetDelete(), 2500)
+  }
+
+  // API status message logic
+  let apiStatus = null
+
+  if (isCreateSuccess || isCreateError) {
+    apiStatus = {
+      success: isCreateSuccess,
+      error: isCreateError,
+      errorMsg: createError,
+      message: "Élément ajouté",
+    }
+  }
+
+  if (isUpdateSuccess || isUpdateError) {
+    apiStatus = {
+      success: isUpdateSuccess,
+      error: isUpdateError,
+      errorMsg: updateError,
+      message: "Élément modifié",
+    }
+  }
+
+  if (isDeleteSuccess || isDeleteError) {
+    apiStatus = {
+      success: isDeleteSuccess,
+      error: isDeleteError,
+      errorMsg: deleteError,
+      message: "Élément supprimé",
+    }
   }
 
   // Form state
@@ -129,6 +164,10 @@ const Edit = () => {
     (loc) => loc.name === form.mainlocation,
   )
 
+  const resetForm = () => {
+    setForm(formInitialState)
+  }
+
   const handleCreate = () => {
     const model = new ItemModel(form)
     if (!model.isValid()) {
@@ -153,6 +192,8 @@ const Edit = () => {
 
   const handleDelete = () => {
     deleteItem(selectedItem.id)
+    dispatch(setSelectedItem(null))
+    resetForm()
   }
 
   const customStyle = {
@@ -349,7 +390,7 @@ const Edit = () => {
         <Button
           variant="contained"
           size="small"
-          onClick={() => setForm(formInitialState)}
+          onClick={resetForm}
           sx={{
             width: "80px",
             backgroundColor: "gray",
@@ -443,24 +484,14 @@ const Edit = () => {
         </Box>
       </DialogActions>
       <div className="container__edit-apiStatus">
-        <ApiStatus
-          isSuccess={isCreateSuccess}
-          isError={isCreateError}
-          error={createError}
-          successMessage="Elément ajouté"
-        />
-        <ApiStatus
-          isSuccess={isUpdateSuccess}
-          isError={isUpdateError}
-          error={updateError}
-          successMessage="Elément modifié"
-        />
-        <ApiStatus
-          isSuccess={isDeleteSuccess}
-          isError={isDeleteError}
-          error={deleteError}
-          successMessage="Elément supprimé"
-        />
+        {apiStatus && (
+          <ApiStatus
+            isSuccess={apiStatus.success}
+            isError={apiStatus.error}
+            error={apiStatus.errorMsg}
+            successMessage={apiStatus.message}
+          />
+        )}
       </div>
     </div>
   )

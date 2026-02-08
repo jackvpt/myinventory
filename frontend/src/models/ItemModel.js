@@ -32,7 +32,7 @@ export default class ItemModel {
 
   // 📦 Format ready to send to the API
   toPayload() {
-    return {
+    return {id: this.id,
       category: this.category.trim(),
       type: this.type.trim(),
       label: this.label.trim(),
