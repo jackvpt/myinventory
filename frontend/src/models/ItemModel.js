@@ -13,6 +13,7 @@ export default class ItemModel {
     this.location =
       this.mainlocation + (this.sublocation ? ` - ${this.sublocation}` : "")
 
+    this.status = data.status ?? 100
     this.notes = data.notes ?? ""
     this.createdAt = data.createdAt ? new Date(data.createdAt) : null
 
@@ -32,13 +33,15 @@ export default class ItemModel {
 
   // 📦 Format ready to send to the API
   toPayload() {
-    return {id: this.id,
+    return {
+      id: this.id,
       category: this.category.trim(),
       type: this.type.trim(),
       label: this.label.trim(),
       quantity: this.quantity,
       mainlocation: this.mainlocation.trim(),
       sublocation: this.sublocation?.trim() || undefined,
+      status: this.status || 100,
       notes: this.notes.trim() || undefined,
     }
   }

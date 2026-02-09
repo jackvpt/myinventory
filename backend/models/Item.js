@@ -33,6 +33,11 @@ const itemSchema = new mongoose.Schema(
       type: String,
       trim: true, // remove whitespace
     },
+    status: {
+      type: Number,
+      required: true,
+      default: 100, // default status is 100 (available)
+    },
     notes: {
       type: String,
     },

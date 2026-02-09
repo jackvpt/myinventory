@@ -49,6 +49,20 @@
     gap: 0.25rem;
   }
 
+  &-status{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0.8rem;
+    padding:0 15px 0 5px;
+
+    &-label{
+      font-size:0.8rem;
+    }
+
+
+  }
+
   &-apiStatus {
     height: 1.6rem;
   }

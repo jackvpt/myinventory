@@ -1,7 +1,6 @@
 // CSS
 import "./Home.scss"
 
-import Item from "../../components/Item/Item"
 import { useItems } from "../../hooks/useItems"
 import Edit from "../../components/Edit/Edit"
 import ItemsDataGrid from "../../components/ItemsDataGrid/ItemsDataGrid"

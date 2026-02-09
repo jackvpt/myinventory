@@ -5,9 +5,10 @@ import "./Edit.scss"
 import {
   DialogActions,
   Button,
-  Stack,
   CircularProgress,
   Box,
+  Typography,
+  Slider,
 } from "@mui/material"
 
 // React
@@ -92,6 +93,13 @@ const Edit = () => {
     setTimeout(() => resetDelete(), 2500)
   }
 
+  // Slider color logic
+  const getSliderColor = (value) => {
+    if (value < 20) return "#d32f2f"
+    if (value < 50) return "#ed6c02"
+    return "#2e7d32"
+  }
+
   // API status message logic
   let apiStatus = null
 
@@ -130,6 +138,7 @@ const Edit = () => {
     quantity: 1,
     mainlocation: "",
     sublocation: "",
+    status: 100,
     notes: "",
   }
   const [form, setForm] = useState(formInitialState)
@@ -365,6 +374,35 @@ const Edit = () => {
         emptyLabel="Aucun sous-emplacement"
         sx={customStyle}
       />
+
+      {/* Status */}
+      <div className="container__edit-status">
+        <div className="container__edit-status-label">Etat:</div>
+
+        <Slider
+          value={form.status}
+          min={0}
+          max={100}
+          step={1}
+          valueLabelDisplay="auto"
+          onChange={handleChange("status")}
+          sx={{
+            color: getSliderColor(form.status),
+
+            "& .MuiSlider-thumb": {
+              border: "2px solid currentColor",
+            },
+
+            "& .MuiSlider-track": {
+              backgroundColor: "currentColor",
+            },
+
+            "& .MuiSlider-rail": {
+              opacity: 0.3,
+            },
+          }}
+        />
+      </div>
 
       {/* Notes */}
       <CustomTextField
