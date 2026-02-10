@@ -42,7 +42,7 @@ export default class ItemModel {
       mainlocation: this.mainlocation.trim(),
       sublocation: this.sublocation?.trim() || undefined,
       status: this.status || 100,
-      notes: this.notes.trim() || undefined,
+      notes: this.notes.trim(),
     }
   }
 }

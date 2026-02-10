@@ -1,0 +1,23 @@
+.container__filterbar {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1rem;
+  border:1px solid gray;
+  border-radius: 5px;
+  padding:0.25rem 0.5rem;
+
+  &-buttonGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    align-items: center;
+
+    p{
+      font-size: 0.8rem;
+    }
+  }
+}

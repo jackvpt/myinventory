@@ -262,7 +262,7 @@ const Edit = () => {
 
       {/* Name */}
       <CustomTextField
-        label="Nom"
+        label="Item"
         value={form.label}
         onChange={handleChange("label")}
         sx={customStyle}

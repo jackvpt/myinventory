@@ -49,15 +49,17 @@ const ItemsDataGrid = ({ items }) => {
     dispatch(setSelectedItem(params.row.toPayload()))
   }
 
+  const filteredItems = items
+
   return (
     <div style={{ height: "100%" }}>
       <DataGrid
-        rows={items}
+        rows={filteredItems}
         columns={columns}
         getRowId={(row) => row.id}
         pageSize={10}
         rowsPerPageOptions={[10, 25, 50]}
-        checkboxSelection
+        // checkboxSelection
         density="compact"
         autoHeight={false}
         onRowClick={handleSelectItem}

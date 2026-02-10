@@ -4,6 +4,7 @@ import "./Home.scss"
 import { useItems } from "../../hooks/useItems"
 import Edit from "../../components/Edit/Edit"
 import ItemsDataGrid from "../../components/ItemsDataGrid/ItemsDataGrid"
+import FilterBar from "../../components/FilterBar/FilterBar"
 
 export default function Inventory() {
   const { data, isLoading, isError, error } = useItems()
@@ -19,6 +20,7 @@ export default function Inventory() {
           <Edit open={true} />
         </div>
         <div className="container__home__layout-items">
+          <FilterBar items={data} />
          <ItemsDataGrid items={data} />
         </div>
       </div>
