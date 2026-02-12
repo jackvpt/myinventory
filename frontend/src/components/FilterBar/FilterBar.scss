@@ -1,13 +1,31 @@
 .container__filterbar {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   gap: 1rem;
   flex-wrap: wrap;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 1rem;
   border:1px solid gray;
   border-radius: 5px;
   padding:0.25rem 0.5rem;
+
+  &-icons{
+    display:flex;
+    flex-direction: row;
+    gap:0.5rem;
+    align-items: center;
+
+    .resetIcon{
+      color:red;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: color 0.2s ease;
+      &:hover{
+        color:darkred;
+      }
+    }
+  }
 
   &-buttonGroup {
     display: flex;

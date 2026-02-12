@@ -17,7 +17,6 @@ const Router = () => {
       {/* Header displayed on all pages */}
       <Header />
       <main role="main">
-        {" "}
         {/* SEO compliant main landmark */}
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 
 import { frFR } from "@mui/x-data-grid/locales"
@@ -20,7 +20,7 @@ const columns = [
       const value = params.value ?? 0
 
       let color = "success"
-      if (value < 20) color = "error"
+      if (value <= 20) color = "error"
       else if (value < 50) color = "warning"
 
       return (
@@ -44,12 +44,19 @@ const columns = [
 
 const ItemsDataGrid = ({ items }) => {
   const dispatch = useDispatch()
+  const filters = useSelector((state) => state.filters)
 
   const handleSelectItem = (params) => {
     dispatch(setSelectedItem(params.row.toPayload()))
   }
 
-  const filteredItems = items
+  const filteredItems = items.filter((item) => {
+    return (
+      (filters.category ? item.category === filters.category : true) &&
+      (filters.type ? item.type === filters.type : true) &&
+      (filters.location ? item.mainlocation === filters.location : true)
+    )
+  })
 
   return (
     <div style={{ height: "100%" }}>
@@ -59,21 +66,23 @@ const ItemsDataGrid = ({ items }) => {
         getRowId={(row) => row.id}
         pageSize={10}
         rowsPerPageOptions={[10, 25, 50]}
-        // checkboxSelection
+        disableSelectionOnClick
+        isCellEditable={() => false}
+        onCellDoubleClick={(_, event) => (event.defaultMuiPrevented = true)}
+        onCellFocus={(_, event) => (event.defaultMuiPrevented = true)}
+        onRowClick={handleSelectItem}
         density="compact"
         autoHeight={false}
-        onRowClick={handleSelectItem}
         localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
-        sx={{
-          "& .MuiDataGrid-columnHeaders": {
-            fontWeight: 700,
-            fontSize: "0.9rem",
+        sx={(theme) => ({
+          "& .MuiDataGrid-row": {
+            cursor: "pointer",
           },
           "& .MuiDataGrid-cell": {
-            fontWeight: 300,
-            fontSize: "0.8rem",
+            outline: "none !important",
           },
-        }}
+          backgroundColor: theme.palette.primary.main,
+        })}
       />
     </div>
   )

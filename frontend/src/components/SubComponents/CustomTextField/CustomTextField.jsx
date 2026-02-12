@@ -20,40 +20,42 @@ const CustomTextField = ({
   const isSelect = Array.isArray(items)
 
   return (
-    <TextField
-      select={isSelect}
-      size="small"
-      margin="normal"
-      label={label}
-      value={value ?? ""}
-      onChange={onChange}
-      fullWidth
-      disabled={disabled}
-      type={!isSelect ? type : undefined}
-      sx={sx}
-      {...props}
-    >
-      {isSelect &&
-        (items.length === 0 ? (
-          <MenuItem disabled value="">
-            {emptyLabel}
-          </MenuItem>
-        ) : (
-          items.map((item) => (
-            <MenuItem
-              key={getValue(item)}
-              value={getValue(item)}
-              sx={{
-                fontSize: "0.75rem",
-                minHeight: 26,
-                py: 0.3,
-              }}
-            >
-              {getLabel(item)}
+    <div className="container__customTextField">
+      <TextField
+        select={isSelect}
+        size="small"
+        margin="normal"
+        label={label}
+        value={value ?? ""}
+        onChange={onChange}
+        fullWidth
+        disabled={disabled}
+        type={!isSelect ? type : undefined}
+        sx={sx}
+        {...props}
+      >
+        {isSelect &&
+          (items.length === 0 ? (
+            <MenuItem disabled value="">
+              {emptyLabel}
             </MenuItem>
-          ))
-        ))}
-    </TextField>
+          ) : (
+            items.map((item) => (
+              <MenuItem
+                key={getValue(item)}
+                value={getValue(item)}
+                sx={{
+                  fontSize: "0.75rem",
+                  minHeight: 26,
+                  py: 0.3,
+                }}
+              >
+                {getLabel(item)}
+              </MenuItem>
+            ))
+          ))}
+      </TextField>{" "}
+    </div>
   )
 }
 

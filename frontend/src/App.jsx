@@ -8,40 +8,18 @@ import { useLocations } from "./hooks/useLocations"
 
 // MUI imports
 import {
-  createTheme,
   ThemeProvider,
   CssBaseline,
   GlobalStyles,
 } from "@mui/material"
 
-import { frFR } from "@mui/material/locale"
-import { frFR as dataGridFrFR } from '@mui/x-data-grid/locales';
 
 import { useTypes } from "./hooks/useTypes"
 import { Provider } from "react-redux"
 import { store } from "./store/store"
+import { darkTheme } from "./styles/themes/darktheme"
 
-// === Creation of the dark theme ===
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark", // enable dark mode
-  },
-  frFR,
-  dataGridFrFR,
-  typography: {
-    fontFamily: "Inter, Arial, sans-serif",
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          textTransform: "none",
-        },
-      },
-    },
-  },
-})
+
 
 function App() {
   // Fetch core application data on app startup
@@ -78,7 +56,7 @@ function App() {
     )
   }
 
-  // Once data is ready, render the router
+   // Once data is ready, render the router
   return (
     <Provider store={store}>
       <ThemeProvider theme={darkTheme}>

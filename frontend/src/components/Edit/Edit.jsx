@@ -7,8 +7,12 @@ import {
   Button,
   CircularProgress,
   Box,
-  Typography,
   Slider,
+  Collapse,
+  IconButton,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@mui/material"
 
 // React
@@ -32,10 +36,13 @@ import ItemModel from "../../models/ItemModel"
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
 import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 import { setSelectedItem } from "../../features/selectedItemSlice"
+import styled from "@emotion/styled"
+import { GridExpandMoreIcon } from "@mui/x-data-grid"
 
 const Edit = () => {
   const dispatch = useDispatch()
   const selectedItem = useSelector((state) => state.selectedItem)
+
   const { data: items = [] } = useItems()
   const { data: categories = [] } = useCategories()
   const { data: types = [] } = useTypes()
@@ -95,7 +102,7 @@ const Edit = () => {
 
   // Slider color logic
   const getSliderColor = (value) => {
-    if (value < 20) return "#d32f2f"
+    if (value <= 20) return "#d32f2f"
     if (value < 50) return "#ed6c02"
     return "#2e7d32"
   }
@@ -129,6 +136,9 @@ const Edit = () => {
       message: "Élément supprimé",
     }
   }
+
+  // IsOpen state
+  const [isOpen, setIsOpen] = useState(true)
 
   // Form state
   const formInitialState = {
@@ -205,7 +215,7 @@ const Edit = () => {
     resetForm()
   }
 
-  const customStyle = {
+  const customStyle = (theme) => ({
     "& .MuiInputBase-root": {
       height: 28,
       fontSize: "0.75rem",
@@ -213,6 +223,7 @@ const Edit = () => {
     },
 
     "& .MuiInputLabel-root": {
+      color: theme.palette.custom.c1,
       fontSize: "0.7rem",
       top: "-4px",
     },
@@ -220,7 +231,13 @@ const Edit = () => {
     "& .MuiInputBase-input": {
       padding: "4px 6px",
     },
-  }
+
+
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: theme => theme.palette.info.main, // label quand focus
+    },
+    backgroundColor: theme.palette.primary.main,
+  })
 
   const customButtonStyle = {
     backgroundColor: "white",
@@ -236,302 +253,373 @@ const Edit = () => {
     borderRadius: 1,
   }
 
+  const ExpandButton = styled(IconButton, {
+    shouldForwardProp: (prop) => prop !== "expand",
+  })(({ theme, expand }) => ({
+    transform: expand ? "rotate(180deg)" : "rotate(0deg)",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+    }),
+  }))
+
   return (
-    <div className="container__edit">
-      {/* Category */}
-      <CustomTextField
-        label="Catégorie"
-        value={form.category}
-        onChange={handleChange("category")}
-        items={categories}
-        getValue={(cat) => cat.name}
-        getLabel={(cat) => cat.name}
-        sx={customStyle}
-      />
-
-      {/* Type */}
-      <CustomTextField
-        label="Type"
-        value={form.type}
-        onChange={handleChange("type")}
-        items={types}
-        getValue={(cat) => cat.name}
-        getLabel={(cat) => cat.name}
-        sx={customStyle}
-      />
-
-      {/* Name */}
-      <CustomTextField
-        label="Item"
-        value={form.label}
-        onChange={handleChange("label")}
-        sx={customStyle}
-      />
-
-      <div className="container__edit-quantity">
-        {/* Quantity */}
-        <CustomTextField
-          label="Quantité"
-          type="number"
-          value={form.quantity}
-          onChange={handleChange("quantity")}
-          inputProps={{ min: 1 }}
-          sx={customStyle}
-        />
-        <div className="container__edit-quantity-spinner">
-          <div
-            className="container__edit-quantity-spinner-button"
-            onClick={() =>
-              setForm((prev) => ({
-                ...prev,
-                quantity: prev.quantity + 1,
-              }))
-            }
-          >
-            +
-          </div>
-          <div
-            className="container__edit-quantity-spinner-button"
-            onClick={() =>
-              setForm((prev) => ({
-                ...prev,
-                quantity: prev.quantity >= 1 ? prev.quantity - 1 : 0,
-              }))
-            }
-          >
-            -
-          </div>
-        </div>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() =>
-            setForm((prev) => ({
-              ...prev,
-              quantity: 1,
-            }))
-          }
-          sx={customButtonStyle}
-        >
-          1
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() =>
-            setForm((prev) => ({
-              ...prev,
-              quantity: 2,
-            }))
-          }
-          sx={customButtonStyle}
-        >
-          2
-        </Button>
-      </div>
-
-      {/* Main location */}
-      <div className="container__edit-locations">
-        {topLocations.map((location) => (
-          <Button
-            key={location}
-            variant="contained"
-            size="small"
-            onClick={() =>
-              setForm((prev) => ({
-                ...prev,
-                mainlocation: location,
-              }))
-            }
-            sx={customButtonStyle}
-          >
-            {location}
-          </Button>
-        ))}
-      </div>
-      <CustomTextField
-        label="Emplacement"
-        value={form.mainlocation}
-        onChange={handleChange("mainlocation")}
-        items={locations}
-        getValue={(loc) => loc.name}
-        getLabel={(loc) => loc.name}
-        emptyLabel="Aucun emplacement"
-        sx={customStyle}
-      />
-
-      {/* Sublocation */}
-      <CustomTextField
-        label="Sous-emplacement"
-        value={form.sublocation}
-        onChange={handleChange("sublocation")}
-        items={selectedLocation?.sublocations || []}
-        getValue={(sub) => sub}
-        getLabel={(sub) => sub}
-        disabled={
-          !selectedLocation || selectedLocation.sublocations.length === 0
-        }
-        emptyLabel="Aucun sous-emplacement"
-        sx={customStyle}
-      />
-
-      {/* Status */}
-      <div className="container__edit-status">
-        <div className="container__edit-status-label">Etat:</div>
-
-        <Slider
-          value={form.status}
-          min={0}
-          max={100}
-          step={1}
-          valueLabelDisplay="auto"
-          onChange={handleChange("status")}
-          sx={{
-            color: getSliderColor(form.status),
-
-            "& .MuiSlider-thumb": {
-              border: "2px solid currentColor",
-            },
-
-            "& .MuiSlider-track": {
-              backgroundColor: "currentColor",
-            },
-
-            "& .MuiSlider-rail": {
-              opacity: 0.3,
-            },
-          }}
-        />
-      </div>
-
-      {/* Notes */}
-      <CustomTextField
-        label="Notes"
-        value={form.notes}
-        onChange={handleChange("notes")}
-        multiline
-        rows={3}
+    <Card
+      sx={(theme) => ({
+        width: "100%",
+        mb: 2,
+        borderRadius: "12px",
+        boxShadow: 2,
+        backgroundColor: theme.palette.primary.dark,
+      })}
+    >
+      {/* HEADER */}
+      <CardHeader
+        title="Édition"
         sx={{
-          ...customStyle,
-
-          "& .MuiInputBase-root": {
-            ...customStyle["& .MuiInputBase-root"],
-            height: "auto",
-            alignItems: "flex-start",
-            paddingTop: "6px",
+          py: 0.5,
+          px: 2,
+          minHeight: "48px",
+        }}
+        slotProps={{
+          title: {
+            sx: {
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+            },
           },
         }}
+        action={
+          <IconButton
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            sx={{
+              transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.25s ease",
+            }}
+          >
+            <GridExpandMoreIcon />
+          </IconButton>
+        }
       />
 
-      <DialogActions>
-        {/* RESET button */}
-        <Button
-          variant="contained"
-          size="small"
-          onClick={resetForm}
-          sx={{
-            width: "80px",
-            backgroundColor: "gray",
-            "&:hover": {
-              backgroundColor: "darkgray",
-            },
-          }}
-        >
-          Reset
-        </Button>
+      {/* COLLAPSE */}
+      <Collapse in={isOpen} timeout="auto">
+        <CardContent sx={{ padding: 0 }}>
+          {/* Category */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Catégorie"
+              value={form.category}
+              onChange={handleChange("category")}
+              items={categories}
+              getValue={(cat) => cat.name}
+              getLabel={(cat) => cat.name}
+              sx={customStyle}
+            />
+          </div>
 
-        {/* CREATE button */}
-        <Box sx={{ position: "relative", display: "inline-flex" }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={handleCreate}
-            color="success"
-            disabled={!isFormValid || isCreating}
-            sx={{ width: "100px" }}
-          >
-            Ajouter
-          </Button>
+          {/* Type */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Type"
+              value={form.type}
+              onChange={handleChange("type")}
+              items={types}
+              getValue={(cat) => cat.name}
+              getLabel={(cat) => cat.name}
+              sx={customStyle}
+            />
+          </div>
 
-          {isCreating && (
-            <CircularProgress
-              size={24}
+          {/* Name */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Item"
+              value={form.label}
+              onChange={handleChange("label")}
+              sx={customStyle}
+            />
+          </div>
+
+          {/* Quantity */}
+          <div className="container__edit-body-quantity">
+            <CustomTextField
+              label="Quantité"
+              type="number"
+              value={form.quantity}
+              onChange={handleChange("quantity")}
+              inputProps={{ min: 1 }}
+              sx={customStyle}
+            />
+
+            <div className="container__edit-body-quantity-spinner">
+              <div
+                className="container__edit-quantity-spinner-button"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    quantity: prev.quantity + 1,
+                  }))
+                }
+              >
+                +
+              </div>
+
+              <div
+                className="container__edit-body-quantity-spinner-button"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    quantity: prev.quantity >= 1 ? prev.quantity - 1 : 0,
+                  }))
+                }
+              >
+                -
+              </div>
+            </div>
+
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() =>
+                setForm((prev) => ({
+                  ...prev,
+                  quantity: 1,
+                }))
+              }
+              sx={customButtonStyle}
+            >
+              1
+            </Button>
+
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() =>
+                setForm((prev) => ({
+                  ...prev,
+                  quantity: 2,
+                }))
+              }
+              sx={customButtonStyle}
+            >
+              2
+            </Button>
+          </div>
+
+          {/* Location */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Emplacement"
+              value={form.mainlocation}
+              onChange={handleChange("mainlocation")}
+              items={locations}
+              getValue={(loc) => loc.name}
+              getLabel={(loc) => loc.name}
+              emptyLabel="Aucun emplacement"
+              sx={customStyle}
+            />
+          </div>
+
+          {/* Last locations */}
+          <div className="container__edit-body-locations">
+            {topLocations.map((location) => (
+              <Button
+                key={location}
+                variant="contained"
+                size="small"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    mainlocation: location,
+                  }))
+                }
+                sx={customButtonStyle}
+              >
+                {location}
+              </Button>
+            ))}
+          </div>
+
+          {/* Sublocation */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Sous-emplacement"
+              value={form.sublocation}
+              onChange={handleChange("sublocation")}
+              items={selectedLocation?.sublocations || []}
+              getValue={(sub) => sub}
+              getLabel={(sub) => sub}
+              disabled={
+                !selectedLocation || selectedLocation.sublocations.length === 0
+              }
+              emptyLabel="Aucun sous-emplacement"
+              sx={customStyle}
+            />
+          </div>
+
+          {/* Status */}
+          <div className="container__edit-body-status">
+            <div className="container__edit-status-label">État :</div>
+
+            <Slider
+              value={form.status}
+              min={0}
+              max={100}
+              step={10}
+              valueLabelDisplay="auto"
+              onChange={handleChange("status")}
               sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: "-12px",
-                marginLeft: "-12px",
+                color: getSliderColor(form.status),
+
+                "& .MuiSlider-thumb": {
+                  border: "2px solid currentColor",
+                },
+
+                "& .MuiSlider-track": {
+                  backgroundColor: "currentColor",
+                },
+
+                "& .MuiSlider-rail": {
+                  opacity: 0.3,
+                },
               }}
             />
-          )}
-        </Box>
+          </div>
 
-        {/* UPDATE button */}
-        <Box sx={{ position: "relative", display: "inline-flex" }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={handleUpdate}
-            color="warning"
-            disabled={!isFormValid || isUpdating}
-            sx={{ width: "100px" }}
-          >
-            Modifier
-          </Button>
-
-          {isUpdating && (
-            <CircularProgress
-              size={24}
+          {/* Notes */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Notes"
+              value={form.notes}
+              onChange={handleChange("notes")}
+              multiline
+              rows={3}
               sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: "-12px",
-                marginLeft: "-12px",
+                ...customStyle,
+
+                "& .MuiInputBase-root": {
+                  ...customStyle["& .MuiInputBase-root"],
+                  height: "auto",
+                  alignItems: "flex-start",
+                  paddingTop: "6px",
+                },
               }}
             />
-          )}
-        </Box>
+          </div>
 
-        {/* DELETE button */}
-        <Box sx={{ position: "relative", display: "inline-flex" }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={handleDelete}
-            color="error"
-            disabled={!isFormValid || isDeleting}
-            sx={{ width: "100px" }}
-          >
-            Supprimer
-          </Button>
-
-          {isDeleting && (
-            <CircularProgress
-              size={24}
+          {/* Actions */}
+          <DialogActions sx={{ mt: 2 }}>
+            {/* Reset */}
+            <Button
+              variant="contained"
+              size="small"
+              onClick={resetForm}
               sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: "-12px",
-                marginLeft: "-12px",
+                width: "80px",
+                backgroundColor: "gray",
+                "&:hover": { backgroundColor: "darkgray" },
               }}
-            />
-          )}
-        </Box>
-      </DialogActions>
-      <div className="container__edit-apiStatus">
-        {apiStatus && (
-          <ApiStatus
-            isSuccess={apiStatus.success}
-            isError={apiStatus.error}
-            error={apiStatus.errorMsg}
-            successMessage={apiStatus.message}
-          />
-        )}
-      </div>
-    </div>
+            >
+              Reset
+            </Button>
+
+            {/* Create */}
+            <Box sx={{ position: "relative" }}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleCreate}
+                color="success"
+                disabled={!isFormValid || isCreating}
+                sx={{ width: "100px" }}
+              >
+                Ajouter
+              </Button>
+
+              {isCreating && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    mt: "-12px",
+                    ml: "-12px",
+                  }}
+                />
+              )}
+            </Box>
+
+            {/* Update */}
+            <Box sx={{ position: "relative" }}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleUpdate}
+                color="warning"
+                disabled={!isFormValid || isUpdating}
+                sx={{ width: "100px" }}
+              >
+                Modifier
+              </Button>
+
+              {isUpdating && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    mt: "-12px",
+                    ml: "-12px",
+                  }}
+                />
+              )}
+            </Box>
+
+            {/* Delete */}
+            <Box sx={{ position: "relative" }}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleDelete}
+                color="error"
+                disabled={!isFormValid || isDeleting}
+                sx={{ width: "100px" }}
+              >
+                Supprimer
+              </Button>
+
+              {isDeleting && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    mt: "-12px",
+                    ml: "-12px",
+                  }}
+                />
+              )}
+            </Box>
+          </DialogActions>
+
+          {/* API Status */}
+          <div className="container__edit-body-apiStatus">
+            {apiStatus && (
+              <ApiStatus
+                isSuccess={apiStatus.success}
+                isError={apiStatus.error}
+                error={apiStatus.errorMsg}
+                successMessage={apiStatus.message}
+              />
+            )}
+          </div>
+        </CardContent>
+      </Collapse>
+    </Card>
   )
 }
 
