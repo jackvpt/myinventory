@@ -1,0 +1,40 @@
+@use "../../styles/utils/variables" as *;
+@use "../../styles/utils/mixins" as *;
+
+.container__itemsCards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &-card{
+    cursor: pointer;
+  }
+
+  &-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+
+    &-labelQuantity {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+
+      &-quantity {
+        padding: 0.5rem;
+        background-color: $primary-color-4;
+      }
+    }
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}

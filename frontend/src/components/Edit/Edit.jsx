@@ -272,19 +272,6 @@ const Edit = () => {
     borderRadius: 1,
   }
 
-  const customButtonPlusMinusStyle = {
-    color: "red",
-    "&:hover": {
-      backgroundColor: "gray",
-      color: "red",
-    },
-
-    minWidth: 10,
-    height: 14,
-    padding: "2px 4px",
-    fontSize: "0.7rem",
-  }
-
   return (
     <Card
       sx={(theme) => ({

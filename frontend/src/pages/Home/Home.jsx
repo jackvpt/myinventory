@@ -5,6 +5,7 @@ import { useItems } from "../../hooks/useItems"
 import Edit from "../../components/Edit/Edit"
 import ItemsDataGrid from "../../components/ItemsDataGrid/ItemsDataGrid"
 import FilterBar from "../../components/FilterBar/FilterBar"
+import ItemsCards from "../../components/ItemsCards/ItemsCards"
 
 export default function Inventory() {
   const { data, isLoading, isError, error } = useItems()
@@ -21,7 +22,12 @@ export default function Inventory() {
         </div>
         <div className="container__home__layout-items">
           <FilterBar items={data} />
-         <ItemsDataGrid items={data} />
+          <div className="container__home__layout-items-cards">
+            <ItemsCards items={data} />
+          </div>
+          <div className="container__home__layout-items-grid">
+            <ItemsDataGrid items={data} />
+          </div>
         </div>
       </div>
     </section>

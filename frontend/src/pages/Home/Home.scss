@@ -6,36 +6,49 @@
     margin-bottom: 3rem;
   }
 
-  flex:1;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height:0;
+  min-height: 0;
 
   &__layout {
-    flex:1;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
     width: 100%;
-    min-height:0;
+    min-height: 0;
 
     @include responsive-desktop {
       flex-direction: row;
     }
 
     &-actions {
-      display:flex;
+      display: flex;
       flex-direction: column;
       overflow-y: auto;
     }
 
     &-items {
-      flex:1;
+      flex: 1;
       min-width: 0;
-      min-height:0;
+      min-height: 0;
       overflow: hidden;
+
+      &-cards {
+        @include responsive-desktop {
+          display: none;
+        }
+      }
+
+      &-grid {
+        display: none;
+        @include responsive-desktop {
+          display: grid;
+        }
+      }
     }
   }
 }
