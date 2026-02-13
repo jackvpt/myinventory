@@ -38,6 +38,8 @@ import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 import styled from "@emotion/styled"
 import { GridExpandMoreIcon } from "@mui/x-data-grid"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
 
 const Edit = () => {
   const dispatch = useDispatch()
@@ -216,27 +218,44 @@ const Edit = () => {
   }
 
   const customStyle = (theme) => ({
-    "& .MuiInputBase-root": {
-      height: 28,
+    /* Root normal */
+    "& .MuiInputBase-root:not(.MuiInputBase-multiline)": {
+      height: 34,
       fontSize: "0.75rem",
-      px: 0.5,
     },
 
+    /* Label */
     "& .MuiInputLabel-root": {
-      color: theme.palette.custom.c1,
       fontSize: "0.7rem",
-      top: "-4px",
+      color: theme.palette.custom.c2,
     },
 
+    "& .MuiInputLabel-shrink": {
+      transform: "translate(14px, -6px) scale(0.75)",
+    },
+
+    "& .MuiInputLabel-focused": {
+      color: theme.palette.info.main,
+    },
+
+    /* Input normal */
     "& .MuiInputBase-input": {
       padding: "4px 6px",
+      fontSize: "0.75rem",
     },
 
-
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: theme => theme.palette.info.main, // label quand focus
+    /* Multiline container */
+    "& .MuiInputBase-multiline": {
+      padding: "6px 12px",
+      alignItems: "flex-start",
     },
-    backgroundColor: theme.palette.primary.main,
+
+    /* Textarea */
+    "& .MuiInputBase-inputMultiline": {
+      padding: 0,
+      fontSize: "0.75rem",
+      lineHeight: 1.4,
+    },
   })
 
   const customButtonStyle = {
@@ -253,14 +272,18 @@ const Edit = () => {
     borderRadius: 1,
   }
 
-  const ExpandButton = styled(IconButton, {
-    shouldForwardProp: (prop) => prop !== "expand",
-  })(({ theme, expand }) => ({
-    transform: expand ? "rotate(180deg)" : "rotate(0deg)",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  }))
+  const customButtonPlusMinusStyle = {
+    color: "red",
+    "&:hover": {
+      backgroundColor: "gray",
+      color: "red",
+    },
+
+    minWidth: 10,
+    height: 14,
+    padding: "2px 4px",
+    fontSize: "0.7rem",
+  }
 
   return (
     <Card
@@ -331,7 +354,7 @@ const Edit = () => {
             />
           </div>
 
-          {/* Name */}
+          {/* Label */}
           <div className="container__edit-body-textField">
             <CustomTextField
               label="Item"
@@ -351,60 +374,59 @@ const Edit = () => {
               inputProps={{ min: 1 }}
               sx={customStyle}
             />
+            <div className="container__edit-body-quantity-buttons">
+              <div className="container__edit-body-quantity-buttons-spinner">
+                <FontAwesomeIcon
+                  icon={faPlusSquare}
+                  className="spinner-icon"
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      quantity: prev.quantity + 1,
+                    }))
+                  }
+                />
 
-            <div className="container__edit-body-quantity-spinner">
-              <div
-                className="container__edit-quantity-spinner-button"
+                <FontAwesomeIcon
+                  icon={faMinusSquare}
+                  className="spinner-icon"
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      quantity: prev.quantity >= 1 ? prev.quantity - 1 : 0,
+                    }))
+                  }
+                />
+              </div>
+
+              <Button
+                variant="contained"
+                size="small"
                 onClick={() =>
                   setForm((prev) => ({
                     ...prev,
-                    quantity: prev.quantity + 1,
+                    quantity: 1,
                   }))
                 }
+                sx={customButtonStyle}
               >
-                +
-              </div>
+                1
+              </Button>
 
-              <div
-                className="container__edit-body-quantity-spinner-button"
+              <Button
+                variant="contained"
+                size="small"
                 onClick={() =>
                   setForm((prev) => ({
                     ...prev,
-                    quantity: prev.quantity >= 1 ? prev.quantity - 1 : 0,
+                    quantity: 2,
                   }))
                 }
+                sx={customButtonStyle}
               >
-                -
-              </div>
+                2
+              </Button>
             </div>
-
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() =>
-                setForm((prev) => ({
-                  ...prev,
-                  quantity: 1,
-                }))
-              }
-              sx={customButtonStyle}
-            >
-              1
-            </Button>
-
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() =>
-                setForm((prev) => ({
-                  ...prev,
-                  quantity: 2,
-                }))
-              }
-              sx={customButtonStyle}
-            >
-              2
-            </Button>
           </div>
 
           {/* Location */}
@@ -460,7 +482,7 @@ const Edit = () => {
 
           {/* Status */}
           <div className="container__edit-body-status">
-            <div className="container__edit-status-label">État :</div>
+            <div className="container__edit-body-status-label">État</div>
 
             <Slider
               value={form.status}
@@ -492,19 +514,10 @@ const Edit = () => {
             <CustomTextField
               label="Notes"
               value={form.notes}
-              onChange={handleChange("notes")}
               multiline
               rows={3}
-              sx={{
-                ...customStyle,
-
-                "& .MuiInputBase-root": {
-                  ...customStyle["& .MuiInputBase-root"],
-                  height: "auto",
-                  alignItems: "flex-start",
-                  paddingTop: "6px",
-                },
-              }}
+              onChange={handleChange("notes")}
+              sx={customStyle}
             />
           </div>
 

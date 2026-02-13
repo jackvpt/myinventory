@@ -35,7 +35,7 @@ export const darkTheme = createTheme(
 
       // Highlight / accents
       info: {
-        main: "#ffd480", // highlight
+        main: "#6faaee",  // secondary-color-2
       },
     },
 

@@ -23,8 +23,8 @@ const CustomTextField = ({
     <div className="container__customTextField">
       <TextField
         select={isSelect}
-        size="small"
-        margin="normal"
+        size={props.multiline ? undefined : "small"}
+        margin={props.multiline ? "dense" : "normal"}
         label={label}
         value={value ?? ""}
         onChange={onChange}
@@ -54,7 +54,7 @@ const CustomTextField = ({
               </MenuItem>
             ))
           ))}
-      </TextField>{" "}
+      </TextField>
     </div>
   )
 }

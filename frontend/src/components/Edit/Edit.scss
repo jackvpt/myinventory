@@ -17,7 +17,7 @@
     font-weight: bold;
     background-color: $primary-color-4;
     padding: 0.5rem;
-    min-width:300px;
+    min-width: 300px;
 
     .toggle-btn {
       background: none;
@@ -55,27 +55,27 @@
       gap: 0.5rem;
       padding: 0 0.5rem;
 
-      &-spinner {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 2px;
-
-        &-button {
+      &-buttons {
+        display:flex;
+        flex-direction: row;
+        gap:0.25rem;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top:10px;
+        
+        &-spinner {
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          background-color: $text-color-2;
-          color: black;
-          font-size: 0.6rem;
-          width: 14px;
-          height: 14px;
-          border: 1px solid gray;
-          cursor: pointer;
+          justify-content: space-between;
+          gap: 2px;
 
-          &:hover {
-            background-color: gray;
+          .spinner-icon {
+            color: white;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            &:hover {
+              color: gray;
+            }
           }
         }
       }
