@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 
 import { frFR } from "@mui/x-data-grid/locales"
-import { Box, LinearProgress } from "@mui/material"
+import StatusBar from "../SubComponents/StatusBar/StatusBar"
 
 const columns = [
   { field: "category", headerName: "Catégorie", width: 120 },
@@ -17,26 +17,7 @@ const columns = [
     headerName: "Etat",
     width: 80,
     renderCell: (params) => {
-      const value = params.value ?? 0
-
-      let color = "success"
-      if (value <= 20) color = "error"
-      else if (value < 50) color = "warning"
-
-      return (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            gap: 0.5,
-          }}
-        >
-          <LinearProgress variant="determinate" value={value} color={color} />
-        </Box>
-      )
+      return <StatusBar value={params.value} />
     },
   },
   { field: "notes", headerName: "Notes", width: 200, type: "string" },
