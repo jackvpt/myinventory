@@ -1,3 +1,6 @@
+// CSS
+import "./ItemsDataGrid.scss"
+
 import { DataGrid } from "@mui/x-data-grid"
 import { useDispatch, useSelector } from "react-redux"
 import { setSelectedItem } from "../../features/selectedItemSlice"
@@ -11,7 +14,16 @@ const columns = [
   { field: "label", headerName: "Item", width: 200 },
   { field: "mainlocation", headerName: "Localisation", width: 150 },
   { field: "sublocation", headerName: "Sous-localisation", width: 150 },
-  { field: "quantity", headerName: "Qté", width: 70, type: "number" },
+  {
+    field: "quantity",
+    headerName: "Qté",
+    width: 70,
+    renderCell: (params) => {
+      return (
+        <div className={params.value === 0 ? "cellQuantity zeroQuantity" : "cellQuantity"}>{params.value}</div>
+      )
+    },
+  },
   {
     field: "status",
     headerName: "Etat",

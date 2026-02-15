@@ -8,8 +8,7 @@ import StatusBar from "../SubComponents/StatusBar/StatusBar"
 
 const ItemsCards = ({ items }) => {
   const dispatch = useDispatch()
-    const filters = useSelector((state) => state.filters)
-
+  const filters = useSelector((state) => state.filters)
 
   const handleSelectCard = (itemId) => {
     dispatch(
@@ -17,7 +16,7 @@ const ItemsCards = ({ items }) => {
     )
   }
 
-    const filteredItems = items.filter((item) => {
+  const filteredItems = items.filter((item) => {
     return (
       (filters.category ? item.category === filters.category : true) &&
       (filters.type ? item.type === filters.type : true) &&
@@ -36,7 +35,13 @@ const ItemsCards = ({ items }) => {
           <div className="container__itemsCards-header">
             <div className="container__itemsCards-header-labelQuantity">
               <div>{item.label}</div>
-              <div className="container__itemsCards-header-labelQuantity-quantity">
+              <div
+                className={
+                  item.quantity === 0
+                    ? "container__itemsCards-header-labelQuantity-quantity zeroQuantity"
+                    : "container__itemsCards-header-labelQuantity-quantity"
+                }
+              >
                 {item.quantity}
               </div>
             </div>

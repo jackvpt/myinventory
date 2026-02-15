@@ -6,11 +6,11 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  &-card{
+  &-card {
     cursor: pointer;
-    display:flex;
+    display: flex;
     flex-direction: column;
-    gap:0;
+    gap: 0;
   }
 
   &-header {
@@ -18,7 +18,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding:0.5rem;
+    padding: 0.5rem;
 
     &-labelQuantity {
       display: flex;
@@ -27,13 +27,18 @@
       gap: 1rem;
 
       &-quantity {
-        width:24px;
-        height:24px;
-        display:flex;
+        width: 24px;
+        height: 24px;
+        display: flex;
         justify-content: center;
         align-items: center;
-        font-size:0.9rem;
+        font-size: 0.9rem;
         background-color: $primary-color-4;
+      }
+
+      .zeroQuantity {
+        background-color: rgb(141, 0, 0);
+        color: white;
       }
     }
   }
@@ -46,8 +51,8 @@
     gap: 0.5rem;
     padding: 0.5rem;
 
-    &-status{
-      width:50px;
+    &-status {
+      width: 50px;
     }
   }
 }
