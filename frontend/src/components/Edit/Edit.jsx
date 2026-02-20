@@ -509,30 +509,32 @@ const Edit = () => {
           </div>
 
           {/* Actions */}
-          <DialogActions sx={{ mt: 2 }}>
+          <div className="container__edit-body-actionButtons">
             {/* Reset */}
-            <Button
-              variant="contained"
-              size="small"
-              onClick={resetForm}
-              sx={{
-                width: "80px",
-                backgroundColor: "gray",
-                "&:hover": { backgroundColor: "darkgray" },
-              }}
-            >
-              Reset
-            </Button>
+            <Box>
+              <Button
+                className="actionButton"
+                variant="contained"
+                size="small"
+                onClick={resetForm}
+                sx={{
+                  backgroundColor: "gray",
+                  "&:hover": { backgroundColor: "darkgray" },
+                }}
+              >
+                Reset
+              </Button>
+            </Box>
 
             {/* Create */}
             <Box sx={{ position: "relative" }}>
               <Button
+                className="actionButton"
                 variant="contained"
                 size="small"
                 onClick={handleCreate}
                 color="success"
                 disabled={!isFormValid || isCreating}
-                sx={{ width: "100px" }}
               >
                 Ajouter
               </Button>
@@ -554,12 +556,12 @@ const Edit = () => {
             {/* Update */}
             <Box sx={{ position: "relative" }}>
               <Button
+                className="actionButton"
                 variant="contained"
                 size="small"
                 onClick={handleUpdate}
                 color="warning"
                 disabled={!isFormValid || isUpdating}
-                sx={{ width: "100px" }}
               >
                 Modifier
               </Button>
@@ -581,12 +583,12 @@ const Edit = () => {
             {/* Delete */}
             <Box sx={{ position: "relative" }}>
               <Button
+                className="actionButton"
                 variant="contained"
                 size="small"
                 onClick={handleDelete}
                 color="error"
                 disabled={!isFormValid || isDeleting}
-                sx={{ width: "100px" }}
               >
                 Supprimer
               </Button>
@@ -604,7 +606,7 @@ const Edit = () => {
                 />
               )}
             </Box>
-          </DialogActions>
+          </div>
 
           {/* API Status */}
           <div className="container__edit-body-apiStatus">
