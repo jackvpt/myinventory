@@ -221,39 +221,25 @@ const Edit = () => {
     /* Root normal */
     "& .MuiInputBase-root:not(.MuiInputBase-multiline)": {
       height: 34,
-      fontSize: "0.75rem",
     },
 
     /* Label */
     "& .MuiInputLabel-root": {
-      fontSize: "0.7rem",
       color: theme.palette.custom.c2,
     },
 
-    "& .MuiInputLabel-shrink": {
-      transform: "translate(14px, -6px) scale(0.75)",
-    },
 
     "& .MuiInputLabel-focused": {
       color: theme.palette.info.main,
     },
 
-    /* Input normal */
-    "& .MuiInputBase-input": {
-      padding: "4px 6px",
-      fontSize: "0.75rem",
-    },
-
     /* Multiline container */
     "& .MuiInputBase-multiline": {
-      padding: "6px 12px",
       alignItems: "flex-start",
     },
 
     /* Textarea */
     "& .MuiInputBase-inputMultiline": {
-      padding: 0,
-      fontSize: "0.75rem",
       lineHeight: 1.4,
     },
   })
@@ -264,12 +250,17 @@ const Edit = () => {
     "&:hover": {
       backgroundColor: "gray",
     },
-
-    minWidth: 24,
     height: 24,
-    padding: "2px 4px",
-    fontSize: "0.7rem",
     borderRadius: 1,
+  }
+
+  const customQuantityButtonStyle = {
+    ...customButtonStyle,
+    width: "24px", // taille minimale confortable
+    minWidth: "24px",
+    height: "24px", // carré pour mobile
+    fontSize: "0.9rem",
+    padding: 0,
   }
 
   return (
@@ -314,7 +305,7 @@ const Edit = () => {
 
       {/* COLLAPSE */}
       <Collapse in={isOpen} timeout="auto">
-        <CardContent sx={{ padding: 0 }}>
+        <CardContent className="container__edit-body" >
           {/* Category */}
           <div className="container__edit-body-textField">
             <CustomTextField
@@ -395,7 +386,7 @@ const Edit = () => {
                     quantity: 1,
                   }))
                 }
-                sx={customButtonStyle}
+                sx={customQuantityButtonStyle}
               >
                 1
               </Button>
@@ -409,7 +400,7 @@ const Edit = () => {
                     quantity: 2,
                   }))
                 }
-                sx={customButtonStyle}
+                sx={customQuantityButtonStyle}
               >
                 2
               </Button>
@@ -511,34 +502,19 @@ const Edit = () => {
           {/* Actions */}
           <div className="container__edit-body-actionButtons">
             {/* Reset */}
-            <Box>
-              <Button
-                className="actionButton"
-                variant="contained"
-                size="small"
-                onClick={resetForm}
-                sx={{
-                  backgroundColor: "gray",
-                  "&:hover": { backgroundColor: "darkgray" },
-                }}
-              >
-                Reset
-              </Button>
-            </Box>
+            <div
+              className="container__edit-body-actionButtons-button reset-button"
+              onClick={resetForm}
+            >
+              Reset
+            </div>
 
             {/* Create */}
-            <Box sx={{ position: "relative" }}>
-              <Button
-                className="actionButton"
-                variant="contained"
-                size="small"
-                onClick={handleCreate}
-                color="success"
-                disabled={!isFormValid || isCreating}
-              >
-                Ajouter
-              </Button>
-
+            <div
+              className="container__edit-body-actionButtons-button create-button"
+              onClick={handleCreate}
+            >
+              Ajouter
               {isCreating && (
                 <CircularProgress
                   size={24}
@@ -546,26 +522,18 @@ const Edit = () => {
                     position: "absolute",
                     top: "50%",
                     left: "50%",
-                    mt: "-12px",
-                    ml: "-12px",
+                    transform: "translate(-50%, -50%)",
                   }}
                 />
               )}
-            </Box>
+            </div>
 
             {/* Update */}
-            <Box sx={{ position: "relative" }}>
-              <Button
-                className="actionButton"
-                variant="contained"
-                size="small"
-                onClick={handleUpdate}
-                color="warning"
-                disabled={!isFormValid || isUpdating}
-              >
-                Modifier
-              </Button>
-
+            <div
+              className="container__edit-body-actionButtons-button update-button"
+              onClick={handleUpdate}
+            >
+              Modifier
               {isUpdating && (
                 <CircularProgress
                   size={24}
@@ -573,26 +541,18 @@ const Edit = () => {
                     position: "absolute",
                     top: "50%",
                     left: "50%",
-                    mt: "-12px",
-                    ml: "-12px",
+                    transform: "translate(-50%, -50%)",
                   }}
                 />
               )}
-            </Box>
+            </div>
 
             {/* Delete */}
-            <Box sx={{ position: "relative" }}>
-              <Button
-                className="actionButton"
-                variant="contained"
-                size="small"
-                onClick={handleDelete}
-                color="error"
-                disabled={!isFormValid || isDeleting}
-              >
-                Supprimer
-              </Button>
-
+            <div
+              className="container__edit-body-actionButtons-button delete-button"
+              onClick={handleDelete}
+            >
+              Supprimer
               {isDeleting && (
                 <CircularProgress
                   size={24}
@@ -600,12 +560,11 @@ const Edit = () => {
                     position: "absolute",
                     top: "50%",
                     left: "50%",
-                    mt: "-12px",
-                    ml: "-12px",
+                    transform: "translate(-50%, -50%)",
                   }}
                 />
               )}
-            </Box>
+            </div>
           </div>
 
           {/* API Status */}
