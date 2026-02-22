@@ -9,30 +9,44 @@ import { frFR } from "@mui/x-data-grid/locales"
 import StatusBar from "../SubComponents/StatusBar/StatusBar"
 
 const columns = [
-  { field: "category", headerName: "Catégorie", width: 120 },
-  { field: "type", headerName: "Type", width: 120 },
-  { field: "label", headerName: "Item", width: 200 },
-  { field: "mainlocation", headerName: "Localisation", width: 150 },
-  { field: "sublocation", headerName: "Sous-localisation", width: 150 },
+  { field: "category", headerName: "Catégorie", flex: 0.8, minWidth: 80 },
+  { field: "type", headerName: "Type", flex: 0.8, minWidth: 80 },
+  { field: "label", headerName: "Item", flex: 1.6, minWidth: 120 },
+  {
+    field: "mainlocation",
+    headerName: "Localisation",
+    flex: 1,
+    minWidth: 80,
+  },
+  {
+    field: "sublocation",
+    headerName: "Sous-localisation",
+    flex: 1.2,
+    minWidth: 100,
+  },
   {
     field: "quantity",
     headerName: "Qté",
-    width: 70,
-    renderCell: (params) => {
-      return (
-        <div className={params.value === 0 ? "cellQuantity zeroQuantity" : "cellQuantity"}>{params.value}</div>
-      )
-    },
+    flex: 0.5,
+    minWidth: 40,
+    renderCell: (params) => (
+      <div
+        className={
+          params.value === 0 ? "cellQuantity zeroQuantity" : "cellQuantity"
+        }
+      >
+        {params.value}
+      </div>
+    ),
   },
   {
     field: "status",
     headerName: "Etat",
-    width: 80,
-    renderCell: (params) => {
-      return <StatusBar value={params.value} />
-    },
+    flex: 0.7,
+    minWidth: 70,
+    renderCell: (params) => <StatusBar value={params.value} />,
   },
-  { field: "notes", headerName: "Notes", width: 200, type: "string" },
+  { field: "notes", headerName: "Notes", flex: 1.5, minWidth: 120 },
 ]
 
 const ItemsDataGrid = ({ items }) => {
@@ -52,32 +66,33 @@ const ItemsDataGrid = ({ items }) => {
   })
 
   return (
-    <div style={{ height: "100%" }}>
-      <DataGrid
-        rows={filteredItems}
-        columns={columns}
-        getRowId={(row) => row.id}
-        pageSize={10}
-        rowsPerPageOptions={[10, 25, 50]}
-        disableSelectionOnClick
-        isCellEditable={() => false}
-        onCellDoubleClick={(_, event) => (event.defaultMuiPrevented = true)}
-        onCellFocus={(_, event) => (event.defaultMuiPrevented = true)}
-        onRowClick={handleSelectItem}
-        density="compact"
-        autoHeight={false}
-        localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
-        sx={(theme) => ({
-          "& .MuiDataGrid-row": {
-            cursor: "pointer",
-          },
-          "& .MuiDataGrid-cell": {
-            outline: "none !important",
-          },
-          backgroundColor: theme.palette.primary.main,
-        })}
-      />
-    </div>
+    <DataGrid
+      rows={filteredItems}
+      columns={columns}
+      getRowId={(row) => row.id}
+      pageSize={10}
+      rowsPerPageOptions={[10, 25, 50]}
+      disableSelectionOnClick
+      isCellEditable={() => false}
+      onCellDoubleClick={(_, event) => (event.defaultMuiPrevented = true)}
+      onCellFocus={(_, event) => (event.defaultMuiPrevented = true)}
+      onRowClick={handleSelectItem}
+      density="compact"
+      autoHeight={false}
+      localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+      sx={(theme) => ({
+        "& .MuiDataGrid-row": {
+          cursor: "pointer",
+        },
+        "& .MuiDataGrid-cell": {
+          outline: "none !important",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        },
+        backgroundColor: theme.palette.primary.main,
+      })}
+    />
   )
 }
 

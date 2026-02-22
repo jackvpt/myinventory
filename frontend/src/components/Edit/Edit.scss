@@ -18,32 +18,17 @@
     background-color: $primary-color-4;
     padding: 0.5rem;
 
-    .toggle-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.25rem;
-      display: flex;
-      align-items: center;
-      color: $text-color-2;
-    }
+    &-toggleButton {
+      display: none !important;
 
-    .toggle-btn:hover {
-      opacity: 0.7;
-    }
-
-    .toggle-btn svg {
-      transition: transform 0.3s ease;
-    }
-
-    .toggle-btn.open svg {
-      transform: rotate(180deg);
+      @include responsive-desktop {
+        display: block !important;
+      }
     }
   }
 
   &-body {
     padding: 0 1rem;
-
 
     &-quantity {
       display: flex;
@@ -114,7 +99,7 @@
         font-size: 0.9rem;
         border: none;
         border-radius: 0.25rem;
-        padding: 0.25rem 1rem;
+        padding: 0.5rem 1rem;
         cursor: pointer;
         transition: background-color 0.2s ease;
 

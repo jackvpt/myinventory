@@ -36,7 +36,6 @@ import ItemModel from "../../models/ItemModel"
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
 import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 import { setSelectedItem } from "../../features/selectedItemSlice"
-import styled from "@emotion/styled"
 import { GridExpandMoreIcon } from "@mui/x-data-grid"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
@@ -158,6 +157,7 @@ const Edit = () => {
   useEffect(() => {
     if (selectedItem) {
       setForm(selectedItem)
+
     } else {
       setForm(formInitialState)
     }
@@ -179,7 +179,16 @@ const Edit = () => {
   }
 
   // Check validity for the button
-  const isFormValid = new ItemModel(form).isValid()
+  const isFormValid = () => {
+    const model = new ItemModel(form)
+    const modelValid = model.isValid()
+
+    return modelValid
+  }
+
+  const subLocationExists = (location, sublocation) => {
+    return location.sublocations.includes(sublocation)
+  }
 
   const selectedLocation = locations.find(
     (loc) => loc.name === form.mainlocation,
@@ -201,6 +210,7 @@ const Edit = () => {
 
   const handleUpdate = () => {
     const model = new ItemModel(form)
+    console.log("model :>> ", model)
     if (!model.isValid()) {
       console.log("Data not valid")
       return
@@ -227,7 +237,6 @@ const Edit = () => {
     "& .MuiInputLabel-root": {
       color: theme.palette.custom.c2,
     },
-
 
     "& .MuiInputLabel-focused": {
       color: theme.palette.info.main,
@@ -275,6 +284,7 @@ const Edit = () => {
     >
       {/* HEADER */}
       <CardHeader
+        className="container__edit-header"
         title="Édition"
         sx={{
           py: 0.5,
@@ -291,6 +301,7 @@ const Edit = () => {
         }}
         action={
           <IconButton
+            className="container__edit-header-toggleButton"
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             sx={{
@@ -305,7 +316,7 @@ const Edit = () => {
 
       {/* COLLAPSE */}
       <Collapse in={isOpen} timeout="auto">
-        <CardContent className="container__edit-body" >
+        <div className="container__edit-body">
           {/* Category */}
           <div className="container__edit-body-textField">
             <CustomTextField
@@ -513,6 +524,7 @@ const Edit = () => {
             <div
               className="container__edit-body-actionButtons-button create-button"
               onClick={handleCreate}
+              disabled={!isFormValid() || isCreating}
             >
               Ajouter
               {isCreating && (
@@ -578,7 +590,7 @@ const Edit = () => {
               />
             )}
           </div>
-        </CardContent>
+        </div>
       </Collapse>
     </Card>
   )
