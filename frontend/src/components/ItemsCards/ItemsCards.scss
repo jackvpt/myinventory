@@ -5,54 +5,80 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 
   &-card {
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 0;
-  }
+    align-items: stretch;
+    position: relative;
 
-  &-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem;
-
-    &-labelQuantity {
+    &-header {
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
       align-items: center;
-      gap: 1rem;
+      padding: 0.25rem 0.5rem;
+      width: 100%;
 
-      &-quantity {
-        width: 24px;
-        height: 24px;
+      &-labelQuantity {
         display: flex;
-        justify-content: center;
+        flex-direction: row;
         align-items: center;
-        font-size: 0.9rem;
-        background-color: $primary-color-4;
-      }
+        gap: 1rem;
 
-      .zeroQuantity {
-        background-color: rgb(141, 0, 0);
-        color: white;
+        &-labelReduced {
+          max-width: 55%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        &-quantity {
+          width: 18px;
+          height: 18px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 0.8rem;
+          background-color: $primary-color-4;
+          border-radius: 0.25rem;
+        }
+
+        .zeroQuantity {
+          background-color: rgb(141, 0, 0);
+          color: white;
+        }
       }
     }
-  }
 
-  &-body {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0.5rem;
-    padding: 0.5rem;
+    &-body {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      width: 100%;
 
-    &-status {
-      width: 50px;
+      &-status {
+        width: 50px;
+      }
+    }
+
+    &-collapseButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 0px;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

@@ -31,8 +31,12 @@
     &-items {
       display: flex;
       flex-direction: column;
-      
+
       &-cards {
+        display: flex;
+        flex-direction: column;
+
+
 
         @include responsive-desktop {
           display: none;
