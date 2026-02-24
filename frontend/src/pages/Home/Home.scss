@@ -24,8 +24,13 @@
     }
 
     &-actions {
+      display:none;
       flex-direction: column;
       overflow-y: auto;
+
+      @include responsive-desktop {
+        display: flex;
+      }
     }
 
     &-items {

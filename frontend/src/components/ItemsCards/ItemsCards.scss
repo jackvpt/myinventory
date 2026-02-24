@@ -30,8 +30,7 @@
         align-items: center;
         gap: 1rem;
 
-        &-labelReduced {
-          max-width: 55%;
+        &-label {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -53,6 +52,22 @@
           color: white;
         }
       }
+
+      &-locationEdit {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+
+        &-editIcon {
+          font-weight: 400;
+          color: $secondary-color-1;
+        }
+      }
+    }
+
+    .labelReduced {
+      max-width: 45%;
     }
 
     &-body {
