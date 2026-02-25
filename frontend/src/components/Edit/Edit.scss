@@ -29,6 +29,9 @@
 
   &-body {
     padding: 0 1rem;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
 
     &-quantity {
       display: flex;
@@ -84,71 +87,7 @@
       }
     }
 
-    &-actionButtons {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      row-gap: 0.5rem;
 
-      &-button {
-        flex: 0 0 49%;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        font-size: 0.9rem;
-        border: none;
-        border-radius: 0.25rem;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-
-        &:hover {
-          opacity: 0.7;
-        }
-
-        &::after {
-          content: "";
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-          background: rgba(255, 255, 255, 0.3);
-          opacity: 0;
-          transition: opacity 0.3s;
-          pointer-events: none;
-          border-radius: inherit;
-        }
-
-        &:active::after {
-          opacity: 1;
-          transition: opacity 0.1s;
-        }
-      }
-
-      .reset-button {
-        background-color: gray;
-        color: white;
-      }
-
-      .create-button {
-        background-color: rgb(0, 146, 0);
-        color: white;
-      }
-      .create-button {
-        background-color: rgb(0, 146, 0);
-        color: white;
-      }
-      .update-button {
-        background-color: rgb(255, 152, 0);
-        color: white;
-      }
-      .delete-button {
-        background-color: rgb(244, 67, 54);
-        color: white;
-      }
-    }
 
     &-apiStatus {
       height: 1.6rem;

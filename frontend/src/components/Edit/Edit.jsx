@@ -3,16 +3,15 @@ import "./Edit.scss"
 
 // MUI
 import {
-  DialogActions,
   Button,
   CircularProgress,
-  Box,
   Slider,
-  Collapse,
   IconButton,
   Card,
   CardHeader,
   CardContent,
+  CardActions,
+  Box,
 } from "@mui/material"
 
 // React
@@ -157,7 +156,6 @@ const Edit = () => {
   useEffect(() => {
     if (selectedItem) {
       setForm(selectedItem)
-
     } else {
       setForm(formInitialState)
     }
@@ -183,11 +181,16 @@ const Edit = () => {
     const model = new ItemModel(form)
     const modelValid = model.isValid()
 
-    return modelValid
+    return (
+      modelValid && subLocationExists(model.mainlocation, model.sublocation)
+    )
   }
 
-  const subLocationExists = (location, sublocation) => {
-    return location.sublocations.includes(sublocation)
+  const subLocationExists = (mainLocation, sublocation) => {
+    const location = locations.find((loc) => loc.name === mainLocation)
+    if (!location) return false
+    if (!sublocation || location.sublocations.length > 0) return true
+    return false
   }
 
   const selectedLocation = locations.find(
@@ -276,13 +279,16 @@ const Edit = () => {
     <Card
       sx={(theme) => ({
         width: "100%",
-        mb: 2,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
         borderRadius: "12px",
         boxShadow: 2,
         backgroundColor: theme.palette.primary.dark,
+        minHeight: 0,
       })}
     >
-      {/* HEADER */}
+      {/* Header */}
       <CardHeader
         className="container__edit-header"
         title="Édition"
@@ -314,8 +320,15 @@ const Edit = () => {
         }
       />
 
-      {/* COLLAPSE */}
-      <Collapse in={isOpen} timeout="auto">
+      <CardContent
+        sx={{
+          flex: 1,
+          // minHeight: 0,
+          display: "flex",
+          padding: 0,
+          overflowY: "auto",
+        }}
+      >
         <div className="container__edit-body">
           {/* Category */}
           <div className="container__edit-body-textField">
@@ -511,87 +524,128 @@ const Edit = () => {
           </div>
 
           {/* Actions */}
-          <div className="container__edit-body-actionButtons">
-            {/* Reset */}
-            <div
-              className="container__edit-body-actionButtons-button reset-button"
-              onClick={resetForm}
+          <CardActions sx={{ justifyContent: "flex-end" ,padding:0,marginTop:1}}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1, 
+                width: "100%",
+                justifyContent: "center",
+              }}
             >
-              Reset
-            </div>
+              {/* Reset */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={resetForm}
+                sx={{ flex: "1 1 45%" }}
+              >
+                Reset
+              </Button>
 
-            {/* Create */}
-            <div
-              className="container__edit-body-actionButtons-button create-button"
-              onClick={handleCreate}
-              disabled={!isFormValid() || isCreating}
-            >
-              Ajouter
-              {isCreating && (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-              )}
-            </div>
+              {/* Create */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleCreate}
+                disabled={!isFormValid() || isCreating}
+                sx={{
+                  position: "relative",
+                  minWidth: 100,
+                  height: 36,
+                  borderRadius: 1,
+                  flex: "1 1 45%",
+                }}
+              >
+                Ajouter
+                {isCreating && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      color: "white",
+                    }}
+                  />
+                )}
+              </Button>
 
-            {/* Update */}
-            <div
-              className="container__edit-body-actionButtons-button update-button"
-              onClick={handleUpdate}
-            >
-              Modifier
-              {isUpdating && (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-              )}
-            </div>
+              {/* Update */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleUpdate}
+                disabled={!isFormValid() || isUpdating}
+                sx={{
+                  position: "relative",
+                  minWidth: 100,
+                  height: 36,
+                  borderRadius: 1,
+                  flex: "1 1 45%",
+                }}
+              >
+                Modifier
+                {isUpdating && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      color: "white",
+                    }}
+                  />
+                )}
+              </Button>
 
-            {/* Delete */}
-            <div
-              className="container__edit-body-actionButtons-button delete-button"
-              onClick={handleDelete}
-            >
-              Supprimer
-              {isDeleting && (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-              )}
-            </div>
-          </div>
-
-          {/* API Status */}
-          <div className="container__edit-body-apiStatus">
-            {apiStatus && (
-              <ApiStatus
-                isSuccess={apiStatus.success}
-                isError={apiStatus.error}
-                error={apiStatus.errorMsg}
-                successMessage={apiStatus.message}
-              />
-            )}
-          </div>
+              {/* Delete */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                sx={{
+                  position: "relative",
+                  minWidth: 100,
+                  height: 36,
+                  borderRadius: 1,
+                  flex: "1 1 45%",
+                }}
+              >
+                Supprimer
+                {isDeleting && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      color: "white",
+                    }}
+                  />
+                )}
+              </Button>
+            </Box>
+          </CardActions>
         </div>
-      </Collapse>
+
+        {/* API Status */}
+        <div className="container__edit-body-apiStatus">
+          {apiStatus && (
+            <ApiStatus
+              isSuccess={apiStatus.success}
+              isError={apiStatus.error}
+              error={apiStatus.errorMsg}
+              successMessage={apiStatus.message}
+            />
+          )}
+        </div>
+      </CardContent>
     </Card>
   )
 }
