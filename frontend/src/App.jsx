@@ -7,19 +7,13 @@ import { useCategories } from "./hooks/useCategories"
 import { useLocations } from "./hooks/useLocations"
 
 // MUI imports
-import {
-  ThemeProvider,
-  CssBaseline,
-  GlobalStyles,
-} from "@mui/material"
-
+import { ThemeProvider, CssBaseline, GlobalStyles } from "@mui/material"
 
 import { useTypes } from "./hooks/useTypes"
 import { Provider } from "react-redux"
 import { store } from "./store/store"
 import { darkTheme } from "./styles/themes/darktheme"
-
-
+import { NotificationProvider } from "./hooks/useNotification"
 
 function App() {
   // Fetch core application data on app startup
@@ -56,29 +50,31 @@ function App() {
     )
   }
 
-   // Once data is ready, render the router
+  // Once data is ready, render the router
   return (
     <Provider store={store}>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />{" "}
-        {/* Apply the background and text colors of the dark theme */}
-        {/* Global style to hide number input spin buttons */}
-        <GlobalStyles
-          styles={{
-            "input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button":
-              {
-                WebkitAppearance: "none",
-                margin: 0,
+      <NotificationProvider autoHideDuration={5000}>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />{" "}
+          {/* Apply the background and text colors of the dark theme */}
+          {/* Global style to hide number input spin buttons */}
+          <GlobalStyles
+            styles={{
+              "input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button":
+                {
+                  WebkitAppearance: "none",
+                  margin: 0,
+                },
+              "input[type=number]": {
+                MozAppearance: "textfield",
               },
-            "input[type=number]": {
-              MozAppearance: "textfield",
-            },
-          }}
-        />
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
-      </ThemeProvider>
+            }}
+          />
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+        </ThemeProvider>
+      </NotificationProvider>
     </Provider>
   )
 }

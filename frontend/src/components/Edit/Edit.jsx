@@ -4,9 +4,7 @@ import "./Edit.scss"
 // MUI
 import {
   Button,
-  CircularProgress,
   Slider,
-  IconButton,
   Card,
   CardHeader,
   CardContent,
@@ -35,13 +33,15 @@ import ItemModel from "../../models/ItemModel"
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
 import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 import { setSelectedItem } from "../../features/selectedItemSlice"
-import { GridExpandMoreIcon } from "@mui/x-data-grid"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
+import CustomButton from "../Buttons/CustomButton"
+import { useNotification } from "../../hooks/useNotification"
 
 const Edit = () => {
   const dispatch = useDispatch()
   const selectedItem = useSelector((state) => state.selectedItem)
+  const { notifySuccess, notifyError } = useNotification()
 
   const { data: items = [] } = useItems()
   const { data: categories = [] } = useCategories()
@@ -111,34 +111,31 @@ const Edit = () => {
   let apiStatus = null
 
   if (isCreateSuccess || isCreateError) {
-    apiStatus = {
-      success: isCreateSuccess,
-      error: isCreateError,
-      errorMsg: createError,
-      message: "Élément ajouté",
-    }
+    // apiStatus = {
+    //   success: isCreateSuccess,
+    //   error: isCreateError,
+    //   errorMsg: createError,
+    //   message: "Élément ajouté",
+    // }
   }
 
   if (isUpdateSuccess || isUpdateError) {
-    apiStatus = {
-      success: isUpdateSuccess,
-      error: isUpdateError,
-      errorMsg: updateError,
-      message: "Élément modifié",
-    }
+    // apiStatus = {
+    //   success: isUpdateSuccess,
+    //   error: isUpdateError,
+    //   errorMsg: updateError,
+    //   message: "Élément modifié",
+    // }
   }
 
   if (isDeleteSuccess || isDeleteError) {
-    apiStatus = {
-      success: isDeleteSuccess,
-      error: isDeleteError,
-      errorMsg: deleteError,
-      message: "Élément supprimé",
-    }
+    // apiStatus = {
+    //   success: isDeleteSuccess,
+    //   error: isDeleteError,
+    //   errorMsg: deleteError,
+    //   message: "Élément supprimé",
+    // }
   }
-
-  // IsOpen state
-  const [isOpen, setIsOpen] = useState(true)
 
   // Form state
   const formInitialState = {
@@ -198,6 +195,7 @@ const Edit = () => {
   )
 
   const resetForm = () => {
+    dispatch(setSelectedItem(null))
     setForm(formInitialState)
   }
 
@@ -268,9 +266,9 @@ const Edit = () => {
 
   const customQuantityButtonStyle = {
     ...customButtonStyle,
-    width: "24px", // taille minimale confortable
+    width: "24px",
     minWidth: "24px",
-    height: "24px", // carré pour mobile
+    height: "24px",
     fontSize: "0.9rem",
     padding: 0,
   }
@@ -282,7 +280,7 @@ const Edit = () => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        borderRadius: "12px",
+        borderRadius: "6px",
         boxShadow: 2,
         backgroundColor: theme.palette.primary.dark,
         minHeight: 0,
@@ -305,19 +303,6 @@ const Edit = () => {
             },
           },
         }}
-        action={
-          <IconButton
-            className="container__edit-header-toggleButton"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-expanded={isOpen}
-            sx={{
-              transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-              transition: "transform 0.25s ease",
-            }}
-          >
-            <GridExpandMoreIcon />
-          </IconButton>
-        }
       />
 
       <CardContent
@@ -524,117 +509,41 @@ const Edit = () => {
           </div>
 
           {/* Actions */}
-          <CardActions sx={{ justifyContent: "flex-end" ,padding:0,marginTop:1}}>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 1, 
-                width: "100%",
-                justifyContent: "center",
-              }}
-            >
+          <CardActions
+            sx={{ justifyContent: "flex-end", padding: 0, marginTop: 1 }}
+          >
+            <div className="container__edit-body-actions">
               {/* Reset */}
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={resetForm}
-                sx={{ flex: "1 1 45%" }}
-              >
-                Reset
-              </Button>
+              <CustomButton action="reset" onClick={resetForm} />
 
               {/* Create */}
-              <Button
-                variant="contained"
-                color="primary"
+              <CustomButton
+                action="create"
                 onClick={handleCreate}
-                disabled={!isFormValid() || isCreating}
-                sx={{
-                  position: "relative",
-                  minWidth: 100,
-                  height: 36,
-                  borderRadius: 1,
-                  flex: "1 1 45%",
-                }}
-              >
-                Ajouter
-                {isCreating && (
-                  <CircularProgress
-                    size={24}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      color: "white",
-                    }}
-                  />
-                )}
-              </Button>
+                loading={isCreating}
+                disabled={!isFormValid()}
+              />
 
               {/* Update */}
-              <Button
-                variant="contained"
-                color="primary"
+              <CustomButton
+                action="update"
                 onClick={handleUpdate}
-                disabled={!isFormValid() || isUpdating}
-                sx={{
-                  position: "relative",
-                  minWidth: 100,
-                  height: 36,
-                  borderRadius: 1,
-                  flex: "1 1 45%",
-                }}
-              >
-                Modifier
-                {isUpdating && (
-                  <CircularProgress
-                    size={24}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      color: "white",
-                    }}
-                  />
-                )}
-              </Button>
+                loading={isUpdating}
+                disabled={!isFormValid()}
+              />
 
               {/* Delete */}
-              <Button
-                variant="contained"
-                color="primary"
+              <CustomButton
+                action="delete"
                 onClick={handleDelete}
-                disabled={isDeleting}
-                sx={{
-                  position: "relative",
-                  minWidth: 100,
-                  height: 36,
-                  borderRadius: 1,
-                  flex: "1 1 45%",
-                }}
-              >
-                Supprimer
-                {isDeleting && (
-                  <CircularProgress
-                    size={24}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      color: "white",
-                    }}
-                  />
-                )}
-              </Button>
-            </Box>
+                loading={isDeleting}
+                disabled={!selectedItem || isDeleting}
+              />
+            </div>
           </CardActions>
         </div>
 
-        {/* API Status */}
+        {/* API Status
         <div className="container__edit-body-apiStatus">
           {apiStatus && (
             <ApiStatus
@@ -644,7 +553,7 @@ const Edit = () => {
               successMessage={apiStatus.message}
             />
           )}
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   )
