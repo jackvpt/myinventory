@@ -5,6 +5,13 @@ import { frFR as dataGridFrFR } from "@mui/x-data-grid/locales"
 // === Creation of the dark theme ===
 export const darkTheme = createTheme(
   {
+    values: {
+      xs: 0,
+      sm: 370, // 👈 mobile
+      md: 768, // 👈 tablet
+      lg: 1024, // 👈 laptop
+      xl: 1440, // 👈 desktop large
+    },
     palette: {
       mode: "dark",
 

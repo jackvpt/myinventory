@@ -24,6 +24,10 @@
       @include responsive-desktop {
         display: none !important;
       }
+
+      &-icon:hover {
+        color: red;
+      }
     }
   }
 

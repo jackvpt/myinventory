@@ -1,4 +1,5 @@
 import { TextField, MenuItem } from "@mui/material"
+import { useTheme, useMediaQuery } from "@mui/material"
 
 const CustomTextField = ({
   label,
@@ -19,6 +20,9 @@ const CustomTextField = ({
 }) => {
   const isSelect = Array.isArray(items)
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
   return (
     <div className="container__customTextField">
       <TextField
@@ -32,6 +36,21 @@ const CustomTextField = ({
         disabled={disabled}
         type={!isSelect ? type : undefined}
         sx={sx}
+        slotProps={
+          isSelect
+            ? {
+                select: {
+                  MenuProps: {
+                    PaperProps: {
+                      sx: {
+                        maxHeight: "70vh",
+                      },
+                    },
+                  },
+                },
+              }
+            : undefined
+        }
         {...props}
       >
         {isSelect &&
@@ -45,9 +64,9 @@ const CustomTextField = ({
                 key={getValue(item)}
                 value={getValue(item)}
                 sx={{
-                  fontSize: "0.75rem",
-                  minHeight: 26,
-                  py: 0.3,
+                  fontSize: isMobile ? "0.9rem" : "0.75rem",
+                  minHeight: isMobile ? 40 : 26,
+                  py: isMobile ? 1 : 0.3,
                 }}
               >
                 {getLabel(item)}

@@ -1,4 +1,4 @@
-import { Drawer, IconButton } from "@mui/material"
+import { Drawer } from "@mui/material"
 import Edit from "../Edit/Edit"
 
 const ModalEdit = ({ open, onClose }) => {
@@ -9,6 +9,12 @@ const ModalEdit = ({ open, onClose }) => {
       onClose={onClose}
       transitionDuration={250}
       ModalProps={{ keepMounted: true }}
+      PaperProps={{
+        sx: {
+          backgroundColor: "black",
+          color: "text.primary",
+        },
+      }}
     >
       <Edit onClose={onClose} />
     </Drawer>

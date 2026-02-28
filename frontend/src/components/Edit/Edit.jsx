@@ -36,7 +36,7 @@ import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
 import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
+import { faMinusSquare, faPlusSquare, faSquareXmark } from "@fortawesome/free-solid-svg-icons"
 import CustomButton from "../Buttons/CustomButton"
 import { useNotification } from "../../hooks/useNotification"
 
@@ -293,7 +293,7 @@ const Edit = ({ onClose }) => {
         title="Édition"
         action={
           <IconButton className="container__edit-header-closeButton" aria-label="close" onClick={onClose}>
-            <CloseIcon fontSize="small" />
+            <FontAwesomeIcon className="container__edit-header-closeButton-icon" icon={faSquareXmark} size="lg"/>
           </IconButton>
         }
         sx={{
