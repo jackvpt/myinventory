@@ -10,7 +10,9 @@ import {
   CardContent,
   CardActions,
   Box,
+  IconButton,
 } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 
 // React
 import { useEffect, useState } from "react"
@@ -38,7 +40,7 @@ import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
 import CustomButton from "../Buttons/CustomButton"
 import { useNotification } from "../../hooks/useNotification"
 
-const Edit = () => {
+const Edit = ({ onClose }) => {
   const dispatch = useDispatch()
   const selectedItem = useSelector((state) => state.selectedItem)
   const { notifySuccess, notifyError } = useNotification()
@@ -269,7 +271,7 @@ const Edit = () => {
     width: "24px",
     minWidth: "24px",
     height: "24px",
-    fontSize: "0.9rem",
+    fontSize: "0.8rem",
     padding: 0,
   }
 
@@ -277,7 +279,6 @@ const Edit = () => {
     <Card
       sx={(theme) => ({
         width: "100%",
-        height: "100%",
         display: "flex",
         flexDirection: "column",
         borderRadius: "6px",
@@ -290,10 +291,19 @@ const Edit = () => {
       <CardHeader
         className="container__edit-header"
         title="Édition"
+        action={
+          <IconButton className="container__edit-header-closeButton" aria-label="close" onClick={onClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
         sx={{
           py: 0.5,
           px: 2,
           minHeight: "48px",
+          "& .MuiCardHeader-action": {
+            alignSelf: "center",
+            marginTop: 0,
+          },
         }}
         slotProps={{
           title: {
@@ -308,10 +318,12 @@ const Edit = () => {
       <CardContent
         sx={{
           flex: 1,
-          // minHeight: 0,
           display: "flex",
           padding: 0,
           overflowY: "auto",
+          "&:last-child": {
+            paddingBottom: 0,
+          },
         }}
       >
         <div className="container__edit-body">

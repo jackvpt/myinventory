@@ -18,11 +18,11 @@
     background-color: $primary-color-4;
     padding: 0.5rem;
 
-    &-toggleButton {
-      display: none !important;
+    &-closeButton {
+      display: block !important;
 
       @include responsive-desktop {
-        display: block !important;
+        display: none !important;
       }
     }
   }
@@ -84,21 +84,18 @@
 
       &-label {
         font-size: 0.8rem;
-        color:#ffa500;
       }
     }
 
-    &-actions{
+    &-actions {
       display: flex;
       flex-direction: row;
       justify-content: center;
       flex-wrap: wrap;
-      gap:0.5rem;
-      width:100%;
+      gap: 0.5rem;
+      width: 100%;
       margin-bottom: 1rem;
     }
-
-
 
     &-apiStatus {
       height: 1.6rem;

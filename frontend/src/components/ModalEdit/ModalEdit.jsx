@@ -10,8 +10,7 @@ const ModalEdit = ({ open, onClose }) => {
       transitionDuration={250}
       ModalProps={{ keepMounted: true }}
     >
-      <Edit />
-      <IconButton onClick={onClose}>X</IconButton>
+      <Edit onClose={onClose} />
     </Drawer>
   )
 }
