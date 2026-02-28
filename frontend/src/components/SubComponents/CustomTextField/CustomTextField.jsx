@@ -21,7 +21,7 @@ const CustomTextField = ({
   const isSelect = Array.isArray(items)
 
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
   return (
     <div className="container__customTextField">
