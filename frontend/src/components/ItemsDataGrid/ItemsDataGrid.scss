@@ -1,10 +1,22 @@
-.cellQuantity {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.cell__alert {
+  font-size: 1.2rem;
 }
 
-.zeroQuantity{
-    background-color: rgb(141, 0, 0);
-    color: white;
+.caution {
+  color: orange;
+}
+
+.warning {
+  color: red;
+}
+
+.cellQuantity {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zeroQuantity {
+  background-color: rgb(141, 0, 0);
+  color: white;
 }

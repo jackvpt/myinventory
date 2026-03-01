@@ -42,6 +42,7 @@ exports.createItem = async (req, res) => {
 /** PUT Update Item */
 exports.updateItem = async (req, res) => {
   const itemObject = req.body
+  console.log('itemObject :>> ', itemObject);
 
   try {
     const item = await Item.findOne({ _id: req.params.id })

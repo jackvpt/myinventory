@@ -51,6 +51,7 @@ import {
   faBan,
   faCircleExclamation,
   faTriangleExclamation,
+  faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons"
 import CustomButton from "../Buttons/CustomButton"
 import { useNotification } from "../../hooks/useNotification"
@@ -564,7 +565,7 @@ const Edit = ({ onClose }) => {
                   <Tooltip title="Aucune">
                     <FontAwesomeIcon
                       className="container__edit-body-notesAlert-alert-icon"
-                      icon={faBan}
+                      icon={faCircleCheck}
                     />
                   </Tooltip>
                 </ToggleButton>

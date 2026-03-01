@@ -7,28 +7,83 @@ import { setSelectedItem } from "../../features/selectedItemSlice"
 
 import { frFR } from "@mui/x-data-grid/locales"
 import StatusBar from "../SubComponents/StatusBar/StatusBar"
+import { Warning } from "@mui/icons-material"
+import {
+  faCircleExclamation,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const columns = [
-  { field: "category", headerName: "Catégorie", flex: 0.8, minWidth: 80 },
-  { field: "type", headerName: "Type", flex: 0.8, minWidth: 80 },
-  { field: "label", headerName: "Item", flex: 1.6, minWidth: 120 },
+  {
+    field: "category",
+    headerName: "Catégorie",
+    flex: 0.8,
+    minWidth: 80,
+    headerAlign: "center",
+  },
+  {
+    field: "type",
+    headerName: "Type",
+    flex: 0.8,
+    minWidth: 80,
+    headerAlign: "center",
+  },
+  {
+    field: "label",
+    headerName: "Item",
+    flex: 1.6,
+    minWidth: 120,
+    headerAlign: "center",
+  },
+  {
+    field: "alert",
+    flex: 0.7,
+    minWidth: 70,
+    headerAlign: "center",
+    align: "center",
+    renderHeader: () => (
+      <Warning style={{ fontSize: "1.2rem", color: "orange" }} />
+    ),
+    renderCell: (params) => {
+      if (params.value === "caution") {
+        return (
+          <FontAwesomeIcon
+            className="cell__alert caution"
+            icon={faCircleExclamation}
+          />
+        )
+      } else if (params.value === "warning") {
+        return (
+          <FontAwesomeIcon
+            className="cell__alert warning"
+            icon={faTriangleExclamation}
+          />
+        )
+      }
+    },
+  },
   {
     field: "mainlocation",
     headerName: "Localisation",
     flex: 1,
     minWidth: 80,
+    headerAlign: "center",
   },
   {
     field: "sublocation",
     headerName: "Sous-localisation",
     flex: 1.2,
     minWidth: 100,
+    headerAlign: "center",
   },
   {
     field: "quantity",
     headerName: "Qté",
     flex: 0.5,
     minWidth: 40,
+    headerAlign: "center",
+
     renderCell: (params) => (
       <div
         className={
@@ -44,19 +99,17 @@ const columns = [
     headerName: "Etat",
     flex: 0.7,
     minWidth: 70,
+    headerAlign: "center",
     renderCell: (params) => <StatusBar value={params.value} />,
   },
-  {field:"alert",
-    headerName:"Alerte",
-    flex:0.7,
-    minWidth:70,
-    renderCell:(params) => (
-      <div className={params.value ? "cellAlert alertActive" : "cellAlert"}>    
-        {params.value ? "!" : ""}
-      </div>
-    )
+
+  {
+    field: "notes",
+    headerName: "Notes",
+    flex: 1.5,
+    minWidth: 120,
+    headerAlign: "center",
   },
-  { field: "notes", headerName: "Notes", flex: 1.5, minWidth: 120 },
 ]
 
 const ItemsDataGrid = ({ items }) => {
