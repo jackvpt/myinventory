@@ -38,6 +38,10 @@ const itemSchema = new mongoose.Schema(
       required: true,
       default: 100, // default status is 100 (available)
     },
+    alert: {
+      type: String,
+      trim: true, // remove whitespace
+    },
     notes: {
       type: String,
     },

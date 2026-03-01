@@ -91,6 +91,33 @@
       }
     }
 
+    &-notesAlert {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+
+      &-notes {
+        width: 100%;
+      }
+
+      &-alert {
+        height: 100%;
+        &-icon {
+          font-size: 1rem;
+        }
+
+        .caution {
+          color: orange;
+        }
+
+        .warning {
+          color: red;
+        }
+      }
+    }
+
     &-actions {
       display: flex;
       flex-direction: row;

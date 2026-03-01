@@ -1,5 +1,5 @@
-import { TextField, MenuItem } from "@mui/material"
-import { useTheme, useMediaQuery } from "@mui/material"
+import { TextField, MenuItem, useTheme } from "@mui/material"
+import { useMediaQuery } from "@mui/material"
 
 const CustomTextField = ({
   label,
@@ -64,9 +64,10 @@ const CustomTextField = ({
                 key={getValue(item)}
                 value={getValue(item)}
                 sx={{
-                  fontSize: isMobile ? "0.9rem" : "0.75rem",
-                  minHeight: isMobile ? 40 : 26,
-                  py: isMobile ? 1 : 0.3,
+                  "&.MuiMenuItem-root": {
+                    minHeight: isMobile ? 70 : 40,
+                  },
+                  py: isMobile ? 1 : 0.5,
                 }}
               >
                 {getLabel(item)}

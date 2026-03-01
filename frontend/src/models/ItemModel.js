@@ -14,6 +14,7 @@ export default class ItemModel {
       this.mainlocation + (this.sublocation ? ` - ${this.sublocation}` : "")
 
     this.status = data.status ?? 100
+    this.alert = data.alert ?? ""
     this.notes = data.notes ?? ""
     this.createdAt = data.createdAt ? new Date(data.createdAt) : null
 

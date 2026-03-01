@@ -46,6 +46,16 @@ const columns = [
     minWidth: 70,
     renderCell: (params) => <StatusBar value={params.value} />,
   },
+  {field:"alert",
+    headerName:"Alerte",
+    flex:0.7,
+    minWidth:70,
+    renderCell:(params) => (
+      <div className={params.value ? "cellAlert alertActive" : "cellAlert"}>    
+        {params.value ? "!" : ""}
+      </div>
+    )
+  },
   { field: "notes", headerName: "Notes", flex: 1.5, minWidth: 120 },
 ]
 

@@ -9,10 +9,19 @@ import {
   CardHeader,
   CardContent,
   CardActions,
-  Box,
+  RadioGroup,
   IconButton,
+  FormControlLabel,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
+import {
+  RemoveCircleOutline,
+  ReportProblemOutlined,
+  WarningAmberOutlined,
+} from "@mui/icons-material"
 
 // React
 import { useEffect, useState } from "react"
@@ -33,10 +42,16 @@ import { useTypes } from "../../hooks/useTypes"
 import ItemModel from "../../models/ItemModel"
 
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
-import ApiStatus from "../SubComponents/ApiStatus/ApiStatus"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMinusSquare, faPlusSquare, faSquareXmark } from "@fortawesome/free-solid-svg-icons"
+import {
+  faMinusSquare,
+  faPlusSquare,
+  faSquareXmark,
+  faBan,
+  faCircleExclamation,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons"
 import CustomButton from "../Buttons/CustomButton"
 import { useNotification } from "../../hooks/useNotification"
 
@@ -148,6 +163,7 @@ const Edit = ({ onClose }) => {
     mainlocation: "",
     sublocation: "",
     status: 100,
+    alert: "",
     notes: "",
   }
   const [form, setForm] = useState(formInitialState)
@@ -160,12 +176,18 @@ const Edit = ({ onClose }) => {
     }
   }, [selectedItem])
 
-  const handleChange = (field) => (event) => {
-    let value = event.target.value
+  const handleChange = (field) => (event, newValue) => {
+    let value
 
-    // Manual type conversion for quantity field
-    if (field === "quantity") {
-      value = value === "" ? "" : Number(value)
+    // Cas ToggleButtonGroup
+    if (field === "alert") {
+      value = newValue ?? ""
+    } else {
+      value = event.target.value
+
+      if (field === "quantity") {
+        value = value === "" ? "" : Number(value)
+      }
     }
 
     setForm((prev) => {
@@ -188,7 +210,8 @@ const Edit = ({ onClose }) => {
   const subLocationExists = (mainLocation, sublocation) => {
     const location = locations.find((loc) => loc.name === mainLocation)
     if (!location) return false
-    if (!sublocation || location.sublocations.length > 0) return true
+    if (location.sublocations.length === 0) return true
+    if (location.sublocations.includes(sublocation)) return true
     return false
   }
 
@@ -292,8 +315,16 @@ const Edit = ({ onClose }) => {
         className="container__edit-header"
         title="Édition"
         action={
-          <IconButton className="container__edit-header-closeButton" aria-label="close" onClick={onClose}>
-            <FontAwesomeIcon className="container__edit-header-closeButton-icon" icon={faSquareXmark} size="lg"/>
+          <IconButton
+            className="container__edit-header-closeButton"
+            aria-label="close"
+            onClick={onClose}
+          >
+            <FontAwesomeIcon
+              className="container__edit-header-closeButton-icon"
+              icon={faSquareXmark}
+              size="lg"
+            />
           </IconButton>
         }
         sx={{
@@ -492,7 +523,6 @@ const Edit = ({ onClose }) => {
               onChange={handleChange("status")}
               sx={{
                 color: getSliderColor(form.status),
-
                 "& .MuiSlider-thumb": {
                   border: "2px solid currentColor",
                 },
@@ -508,16 +538,70 @@ const Edit = ({ onClose }) => {
             />
           </div>
 
-          {/* Notes */}
-          <div className="container__edit-body-textField">
-            <CustomTextField
-              label="Notes"
-              value={form.notes}
-              multiline
-              rows={3}
-              onChange={handleChange("notes")}
-              sx={customStyle}
-            />
+          <div className="container__edit-body-notesAlert">
+            {/* Notes */}
+            <div className="container__edit-body-notesAlert-notes">
+              <CustomTextField
+                label="Notes"
+                value={form.notes}
+                multiline
+                rows={3}
+                onChange={handleChange("notes")}
+                sx={customStyle}
+              />
+            </div>
+
+            {/* Alert */}
+            <div className="container__edit-body-notesAlert-alert">
+              <ToggleButtonGroup
+                value={form.alert ?? ""}
+                exclusive
+                onChange={handleChange("alert")}
+                orientation="vertical"
+                size="small"
+              >
+                <ToggleButton value="">
+                  <Tooltip title="Aucune">
+                    <FontAwesomeIcon
+                      className="container__edit-body-notesAlert-alert-icon"
+                      icon={faBan}
+                    />
+                  </Tooltip>
+                </ToggleButton>
+
+                <ToggleButton
+                  value="caution"
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "warning.main",
+                    },
+                  }}
+                >
+                  <Tooltip title="Caution">
+                    <FontAwesomeIcon
+                      className="container__edit-body-notesAlert-alert-icon caution"
+                      icon={faCircleExclamation}
+                    />
+                  </Tooltip>
+                </ToggleButton>
+
+                <ToggleButton
+                  value="warning"
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "error.main",
+                    },
+                  }}
+                >
+                  <Tooltip title="Warning">
+                    <FontAwesomeIcon
+                      className="container__edit-body-notesAlert-alert-icon warning"
+                      icon={faTriangleExclamation}
+                    />
+                  </Tooltip>
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </div>
           </div>
 
           {/* Actions */}
