@@ -1,7 +1,8 @@
 import axios from "axios"
 import ItemModel from "../models/ItemModel"
+import { COMMON_API_URL } from "./common_url"
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = COMMON_API_URL
 
 // Create an Axios instance for easier configuration
 const api = axios.create({

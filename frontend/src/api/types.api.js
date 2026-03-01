@@ -1,6 +1,7 @@
 import TypeModel from "../models/TypeModel"
+import { COMMON_API_URL } from "./common_url"
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = COMMON_API_URL
 
 export const fetchTypes = async () => {
   const response = await fetch(`${API_URL}/types`)

@@ -1,6 +1,7 @@
 import CategoryModel from "../models/CategoryModel"
+import {  COMMON_API_URL } from "./common_url"
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = COMMON_API_URL
 
 export const fetchCategories = async () => {
   const response = await fetch(`${API_URL}/categories`)
