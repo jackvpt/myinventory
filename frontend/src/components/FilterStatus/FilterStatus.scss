@@ -1,0 +1,23 @@
+@use "../../styles/utils/variables" as *;
+@use "../../styles/utils/mixins" as *;
+
+.container__filterStatus {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
+
+  &-filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 0.9rem;
+    background-color: $primary-color-2;
+    padding: 0.25rem 0.75rem;
+  }
+}

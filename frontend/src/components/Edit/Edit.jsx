@@ -9,19 +9,7 @@ import {
   CardHeader,
   CardContent,
   CardActions,
-  RadioGroup,
-  IconButton,
-  FormControlLabel,
-  ToggleButton,
-  ToggleButtonGroup,
-  Tooltip,
 } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
-import {
-  RemoveCircleOutline,
-  ReportProblemOutlined,
-  WarningAmberOutlined,
-} from "@mui/icons-material"
 
 // React
 import { useEffect, useState } from "react"
@@ -44,22 +32,12 @@ import ItemModel from "../../models/ItemModel"
 import CustomTextField from "../SubComponents/CustomTextField/CustomTextField"
 import { setSelectedItem } from "../../features/selectedItemSlice"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faMinusSquare,
-  faPlusSquare,
-  faSquareXmark,
-  faBan,
-  faCircleExclamation,
-  faTriangleExclamation,
-  faCircleCheck,
-} from "@fortawesome/free-solid-svg-icons"
+import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
 import CustomButton from "../Buttons/CustomButton"
-import { useNotification } from "../../hooks/useNotification"
 
-const Edit = ({ onClose }) => {
+const Edit = () => {
   const dispatch = useDispatch()
   const selectedItem = useSelector((state) => state.selectedItem)
-  const { notifySuccess, notifyError } = useNotification()
 
   const { data: items = [] } = useItems()
   const { data: categories = [] } = useCategories()
@@ -83,7 +61,6 @@ const Edit = ({ onClose }) => {
     isPending: isCreating,
     isSuccess: isCreateSuccess,
     isError: isCreateError,
-    error: createError,
     reset: resetCreate,
   } = useCreateItem()
 
@@ -92,7 +69,6 @@ const Edit = ({ onClose }) => {
     isPending: isUpdating,
     isSuccess: isUpdateSuccess,
     isError: isUpdateError,
-    error: updateError,
     reset: resetUpdate,
   } = useUpdateItem()
 
@@ -101,7 +77,6 @@ const Edit = ({ onClose }) => {
     isPending: isDeleting,
     isSuccess: isDeleteSuccess,
     isError: isDeleteError,
-    error: deleteError,
     reset: resetDelete,
   } = useDeleteItem()
 
@@ -125,36 +100,6 @@ const Edit = ({ onClose }) => {
     return "#2e7d32"
   }
 
-  // API status message logic
-  let apiStatus = null
-
-  if (isCreateSuccess || isCreateError) {
-    // apiStatus = {
-    //   success: isCreateSuccess,
-    //   error: isCreateError,
-    //   errorMsg: createError,
-    //   message: "Élément ajouté",
-    // }
-  }
-
-  if (isUpdateSuccess || isUpdateError) {
-    // apiStatus = {
-    //   success: isUpdateSuccess,
-    //   error: isUpdateError,
-    //   errorMsg: updateError,
-    //   message: "Élément modifié",
-    // }
-  }
-
-  if (isDeleteSuccess || isDeleteError) {
-    // apiStatus = {
-    //   success: isDeleteSuccess,
-    //   error: isDeleteError,
-    //   errorMsg: deleteError,
-    //   message: "Élément supprimé",
-    // }
-  }
-
   // Form state
   const formInitialState = {
     category: "",
@@ -164,7 +109,6 @@ const Edit = ({ onClose }) => {
     mainlocation: "",
     sublocation: "",
     status: 100,
-    alert: "",
     notes: "",
   }
   const [form, setForm] = useState(formInitialState)
@@ -177,18 +121,12 @@ const Edit = ({ onClose }) => {
     }
   }, [selectedItem])
 
-  const handleChange = (field) => (event, newValue) => {
-    let value
+  const handleChange = (field) => (event) => {
+    let value = event.target.value
 
-    // Cas ToggleButtonGroup
-    if (field === "alert") {
-      value = newValue ?? ""
-    } else {
-      value = event.target.value
-
-      if (field === "quantity") {
-        value = value === "" ? "" : Number(value)
-      }
+    // Manual type conversion for quantity field
+    if (field === "quantity") {
+      value = value === "" ? "" : Number(value)
     }
 
     setForm((prev) => {
@@ -211,8 +149,7 @@ const Edit = ({ onClose }) => {
   const subLocationExists = (mainLocation, sublocation) => {
     const location = locations.find((loc) => loc.name === mainLocation)
     if (!location) return false
-    if (location.sublocations.length === 0) return true
-    if (location.sublocations.includes(sublocation)) return true
+    if (!sublocation || location.sublocations.length > 0) return true
     return false
   }
 
@@ -295,7 +232,7 @@ const Edit = ({ onClose }) => {
     width: "24px",
     minWidth: "24px",
     height: "24px",
-    fontSize: "0.8rem",
+    fontSize: "0.9rem",
     padding: 0,
   }
 
@@ -303,6 +240,7 @@ const Edit = ({ onClose }) => {
     <Card
       sx={(theme) => ({
         width: "100%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         borderRadius: "6px",
@@ -315,27 +253,10 @@ const Edit = ({ onClose }) => {
       <CardHeader
         className="container__edit-header"
         title="Édition"
-        action={
-          <IconButton
-            className="container__edit-header-closeButton"
-            aria-label="close"
-            onClick={onClose}
-          >
-            <FontAwesomeIcon
-              className="container__edit-header-closeButton-icon"
-              icon={faSquareXmark}
-              size="lg"
-            />
-          </IconButton>
-        }
         sx={{
           py: 0.5,
           px: 2,
           minHeight: "48px",
-          "& .MuiCardHeader-action": {
-            alignSelf: "center",
-            marginTop: 0,
-          },
         }}
         slotProps={{
           title: {
@@ -350,12 +271,10 @@ const Edit = ({ onClose }) => {
       <CardContent
         sx={{
           flex: 1,
+          // minHeight: 0,
           display: "flex",
           padding: 0,
           overflowY: "auto",
-          "&:last-child": {
-            paddingBottom: 0,
-          },
         }}
       >
         <div className="container__edit-body">
@@ -524,6 +443,7 @@ const Edit = ({ onClose }) => {
               onChange={handleChange("status")}
               sx={{
                 color: getSliderColor(form.status),
+
                 "& .MuiSlider-thumb": {
                   border: "2px solid currentColor",
                 },
@@ -539,70 +459,16 @@ const Edit = ({ onClose }) => {
             />
           </div>
 
-          <div className="container__edit-body-notesAlert">
-            {/* Notes */}
-            <div className="container__edit-body-notesAlert-notes">
-              <CustomTextField
-                label="Notes"
-                value={form.notes}
-                multiline
-                rows={3}
-                onChange={handleChange("notes")}
-                sx={customStyle}
-              />
-            </div>
-
-            {/* Alert */}
-            <div className="container__edit-body-notesAlert-alert">
-              <ToggleButtonGroup
-                value={form.alert ?? ""}
-                exclusive
-                onChange={handleChange("alert")}
-                orientation="vertical"
-                size="small"
-              >
-                <ToggleButton value="">
-                  <Tooltip title="Aucune">
-                    <FontAwesomeIcon
-                      className="container__edit-body-notesAlert-alert-icon"
-                      icon={faCircleCheck}
-                    />
-                  </Tooltip>
-                </ToggleButton>
-
-                <ToggleButton
-                  value="caution"
-                  sx={{
-                    "&.Mui-selected": {
-                      color: "warning.main",
-                    },
-                  }}
-                >
-                  <Tooltip title="Caution">
-                    <FontAwesomeIcon
-                      className="container__edit-body-notesAlert-alert-icon caution"
-                      icon={faCircleExclamation}
-                    />
-                  </Tooltip>
-                </ToggleButton>
-
-                <ToggleButton
-                  value="warning"
-                  sx={{
-                    "&.Mui-selected": {
-                      color: "error.main",
-                    },
-                  }}
-                >
-                  <Tooltip title="Warning">
-                    <FontAwesomeIcon
-                      className="container__edit-body-notesAlert-alert-icon warning"
-                      icon={faTriangleExclamation}
-                    />
-                  </Tooltip>
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </div>
+          {/* Notes */}
+          <div className="container__edit-body-textField">
+            <CustomTextField
+              label="Notes"
+              value={form.notes}
+              multiline
+              rows={3}
+              onChange={handleChange("notes")}
+              sx={customStyle}
+            />
           </div>
 
           {/* Actions */}
@@ -639,18 +505,6 @@ const Edit = ({ onClose }) => {
             </div>
           </CardActions>
         </div>
-
-        {/* API Status
-        <div className="container__edit-body-apiStatus">
-          {apiStatus && (
-            <ApiStatus
-              isSuccess={apiStatus.success}
-              isError={apiStatus.error}
-              error={apiStatus.errorMsg}
-              successMessage={apiStatus.message}
-            />
-          )}
-        </div> */}
       </CardContent>
     </Card>
   )

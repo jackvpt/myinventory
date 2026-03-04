@@ -11,11 +11,11 @@ const FilterBar = ({ items }) => {
   const dispatch = useDispatch()
   const filters = useSelector((state) => state.filters)
 
-  const locations = [...new Set(items.map((item) => item.mainlocation))].filter(
+  const categories = [...new Set(items.map((item) => item.category))].filter(
     Boolean,
   )
 
-  const categories = [...new Set(items.map((item) => item.category))].filter(
+  const locations = [...new Set(items.map((item) => item.mainlocation))].filter(
     Boolean,
   )
 
@@ -30,7 +30,7 @@ const FilterBar = ({ items }) => {
     dispatch(setFilters(updated))
   }
 
-  const buttonStyle =(theme) => ({
+  const buttonStyle = (theme) => ({
     textTransform: "none",
     px: 2,
     borderRadius: "2px",
@@ -64,6 +64,24 @@ const FilterBar = ({ items }) => {
           onClick={() => dispatch(resetFilters())}
         />
       </div>
+
+      {/* Category */}
+      <div className="container__filterbar-buttonGroup">
+        <p>Catégorie</p>
+        <ToggleButtonGroup
+          size="small"
+          exclusive
+          value={filters.category}
+          onChange={handleChange("category")}
+        >
+          {categories.map((category) => (
+            <ToggleButton key={category} value={category} sx={buttonStyle}>
+              {category}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </div>
+
       {/* Localisation */}
       <div className="container__filterbar-buttonGroup">
         <p>Localisation</p>
@@ -77,23 +95,6 @@ const FilterBar = ({ items }) => {
           {locations.map((loc) => (
             <ToggleButton key={loc} value={loc} sx={buttonStyle}>
               {loc}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
-      </div>
-
-      {/* Catégorie */}
-      <div className="container__filterbar-buttonGroup">
-        <p>Catégorie</p>
-        <ToggleButtonGroup
-          size="small"
-          exclusive
-          value={filters.category}
-          onChange={handleChange("category")}
-        >
-          {categories.map((category) => (
-            <ToggleButton key={category} value={category} sx={buttonStyle}>
-              {category}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>

@@ -6,9 +6,47 @@ import {
   updateItem,
 } from "../api/items.api"
 import ItemModel from "../models/ItemModel"
+import { useNotification } from "./useNotification"
 
 const invalidateItems = (client) =>
   client.invalidateQueries({ queryKey: ["items"] })
+
+const useMutationWithNotification = (config) => {
+  const queryClient = useQueryClient()
+  const { notifySuccess, notifyError } = useNotification()
+
+  return useMutation({
+    ...config,
+
+    onSuccess: (data, variables, context) => {
+      if (config.successMessage) {
+        notifySuccess(
+          typeof config.successMessage === "function"
+            ? config.successMessage(data)
+            : config.successMessage,
+        )
+      }
+
+      config.onSuccess?.(data, variables, context)
+    },
+
+    onError: (error, variables, context) => {
+      const message =
+        error?.message || config.errorMessage || "Une erreur est survenue"
+
+      notifyError(message)
+      config.onError?.(error, variables, context)
+    },
+
+    onSettled: (data, error, variables, context) => {
+      if (config.invalidate !== false) {
+        invalidateItems(queryClient)
+      }
+
+      config.onSettled?.(data, error, variables, context)
+    },
+  })
+}
 
 // ----------------------------
 // Fetch all items
@@ -48,36 +86,22 @@ export const useItems = () => {
 // ----------------------------
 // Create a new item
 // ----------------------------
-export const useCreateItem = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
+export const useCreateItem = () =>
+  useMutationWithNotification({
     mutationFn: createItem,
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
-    },
+    successMessage: "Item ajouté",
+    errorMessage: "Erreur lors de la création",
   })
-}
 
 // ----------------------------
 // Delete an item
 // ----------------------------
-export const useDeleteItem = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
+export const useDeleteItem = () =>
+  useMutationWithNotification({
     mutationFn: deleteItem,
-
-    onSuccess: () => {
-      invalidateItems(queryClient)
-    },
-
-    onError: (error) => {
-      console.error("Delete error:", error?.message || error)
-    },
+    successMessage: "Item supprimé",
+    errorMessage: "Erreur lors de la suppression",
   })
-}
 
 // ----------------------------
 // Update an existing item
@@ -85,13 +109,18 @@ export const useDeleteItem = () => {
 export const useUpdateItem = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
+  return useMutationWithNotification({
     mutationFn: ({ id, item }) => updateItem({ id, item }),
+
+    successMessage: (data) =>
+      data?.name ? `Item "${data.name}" mis à jour` : "Item mis à jour",
+
+    errorMessage: "Erreur lors de la mise à jour",
 
     onMutate: async ({ id, item }) => {
       await queryClient.cancelQueries({ queryKey: ["items"] })
 
-      const previousItems = queryClient.getQueryData(["items"]) || []
+      const previousItems = queryClient.getQueryData(["items"])
 
       queryClient.setQueryData(["items"], (old = []) =>
         old.map((i) => (i.id === id ? new ItemModel({ ...i, ...item }) : i)),
@@ -101,15 +130,9 @@ export const useUpdateItem = () => {
     },
 
     onError: (error, _vars, context) => {
-      console.error("Update error:", error)
-
       if (context?.previousItems) {
         queryClient.setQueryData(["items"], context.previousItems)
       }
-    },
-
-    onSettled: () => {
-      invalidateItems(queryClient)
     },
   })
 }
