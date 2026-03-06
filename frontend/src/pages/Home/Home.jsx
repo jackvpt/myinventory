@@ -6,7 +6,6 @@ import Edit from "../../components/Edit/Edit"
 import ItemsDataGrid from "../../components/ItemsDataGrid/ItemsDataGrid"
 import FilterBar from "../../components/FilterBar/FilterBar"
 import ItemsCards from "../../components/ItemsCards/ItemsCards"
-import { Filter } from "@mui/icons-material"
 import FilterStatus from "../../components/FilterStatus/FilterStatus"
 
 export default function Inventory() {

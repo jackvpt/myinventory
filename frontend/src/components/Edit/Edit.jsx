@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardContent,
   CardActions,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 
 // React
@@ -34,8 +36,9 @@ import { setSelectedItem } from "../../features/selectedItemSlice"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMinusSquare, faPlusSquare } from "@fortawesome/free-solid-svg-icons"
 import CustomButton from "../Buttons/CustomButton"
+import CloseButton from "../Buttons/CloseButton"
 
-const Edit = () => {
+const Edit = ({ onClose }) => {
   const dispatch = useDispatch()
   const selectedItem = useSelector((state) => state.selectedItem)
 
@@ -236,6 +239,9 @@ const Edit = () => {
     padding: 0,
   }
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+
   return (
     <Card
       sx={(theme) => ({
@@ -253,6 +259,11 @@ const Edit = () => {
       <CardHeader
         className="container__edit-header"
         title="Édition"
+        action={
+          isMobile && (
+            <CloseButton onClick={onClose} />
+          )
+        }
         sx={{
           py: 0.5,
           px: 2,
@@ -266,12 +277,11 @@ const Edit = () => {
             },
           },
         }}
-      />
+      ></CardHeader>
 
       <CardContent
         sx={{
           flex: 1,
-          // minHeight: 0,
           display: "flex",
           padding: 0,
           overflowY: "auto",
